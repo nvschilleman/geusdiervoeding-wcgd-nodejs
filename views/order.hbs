@@ -1,0 +1,41 @@
+<script src="/js/jquery.nice-number.js"></script>
+<script src="/js/order.js"></script>
+<script src="/js/shared.js"></script>
+<div class="container">
+    <div class="well" style="padding: 19px 19px 0px 19px;">
+        <div class="order-header">
+            <h3 class="undertitle"><span id="delivery_method_prefix"></span><span id="delivery_method"></span></h3>
+            <h1 class="order-id">#<span id="order_id"></span></h1>
+            <h3 class="undertitle" style="margin: 5px 0 25px;"><span id="delivery_date_title"></span><span id="delivery_date"></span></h3>
+            <div class="accordion accordion-flush col-sm-12 col-md-4 offset-md-4" id="customerInfoAccordion">
+                <div>
+                    <button style="background:inherit;" class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#customerInfoContainer" aria-expanded="false" aria-controls="customerInfoContainer">
+                        <h3 id="customerInfoCollapseCaption" class="undertitle">Klantdetails weergeven</h3>
+                    </button>
+                    <div id="customerInfoContainer" class="accordion-collapse collapse" data-bs-parent="#customerInfoAccordion" style="">
+                        <div class="accordion-body">
+                            <span id="customerName"></span><br />
+                            <span id="customerAddress"></span><br />
+                            <span id="postcode"></span>&nbsp;<span id="cityName"></span><br />
+                            <span id="emailAddress"></span><br />
+                            <span id="mobilePhone"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="well">
+        <div class="quantity-inputs">
+            <h1 id="tripnumber">Ritnummer <span id="trip_number"></span></h1>
+            <form class="form-setquantities">
+                <h3 class="undertitle">Aantal droog</h3>
+                <div class="dry_input"><input class="btn btn-lg" type="number" min="0" max="10" id="dry_quantity_input" /></div>
+                <br />
+                <h3 class="undertitle">Aantal dozen</h3>
+                <div class="box_input"><input class="btn btn-lg" type="number" min="0" max="10" id="box_quantity_input" /></div>
+                <input style="margin-top: 1em;" type="submit" id="order_submit_button" class="btn btn-primary" value="Order verzenden">
+            </form>
+        </div>
+    </div>
+</div>

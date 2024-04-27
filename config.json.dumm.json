@@ -1,0 +1,18 @@
+{
+    "wordpress": {
+        "rest_endpoint" : "",
+        "token_auth_url": "",
+        "token_auth_validate_url" : "",
+        "static_token": ""
+    },
+    "wcgd": {
+        "order_endpoint" : "",
+        "list_order_endpoint": "",
+        "update_order_endpoint" : "",
+        "mark_collected_order_endpoint" : "",
+        "product_api_endpoint": ""
+    },
+    "zpl_printer": {
+        "print_endpoint" : ""
+    }
+}

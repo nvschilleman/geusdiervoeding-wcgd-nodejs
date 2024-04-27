@@ -1,0 +1,233 @@
+var getUrlParameter = function getUrlParameter(sParam) {
+    var sPageURL = window.location.search.substring(1),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+        }
+    }
+    return false;
+};
+
+const showLoading = function() {
+    Swal.fire({
+        title: 'Aan het laden...',
+        showConfirmButton:false,
+        allowEscapeKey: false,
+        allowOutsideClick: false,
+        //timer: 4500,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    })
+};
+
+function toastNotification(msg){
+    const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: msg.timer,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        }
+      });
+      Toast.fire({
+        icon: msg.icon,
+        title: msg.title
+      });     
+}
+
+
+function getOrder(order_id){
+    showLoading();
+    $.ajax({
+        type: "POST",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', 'Bearer ' + Cookies.getJSON('wp_CustomAuth').token);
+        },
+        url: 'https://'+self.location.host+'/get/order',
+        data: {
+            id: order_id 
+        },
+        success: getOrder_result,
+        dataType: 'json'
+    });
+}
+
+$(document).ready(function(){
+
+    $('li.active').removeClass('active').removeAttr('aria-current');
+    $('a[href="' + location.pathname + location.search +'"]').closest('li').addClass('active').attr('aria-current', 'page'); 
+      
+
+    $('#user_display_name').text(Cookies.getJSON('wp_CustomAuth').user_display_name);
+    $('button#signout_button').click(function(e) {
+        e.preventDefault();
+        flushSession();
+    });
+});
+
+function redirect(res){
+    console.log('PathName');
+    console.log(window.location.pathname);
+    if (window.location.pathname == '/scan/order'){
+        window.location.href = "/order?id="+res.id;
+    }else{
+        orderData(res);
+    }   
+}
+
+async function getOrder_result(res){
+    console.log('getOrderResult');
+    console.log(res);
+    let icon = 'error';
+    if(res.hasOwnProperty('code')){
+        if (res.data.status == 303){
+            icon = 'info';
+        }
+        Swal.fire({
+            title: res.code,
+            html: res.message,
+            icon: icon
+          });
+    return;
+    }
+
+    if(res.combineOrderChild !== null && res.combineOrderChild !== undefined && res.combineOrderChild !== ''){
+        let result = await Swal.fire({
+            title: 'Dit is een combi order!',
+            text: 'Vergeet de artikelen van order #'+res.combineOrderChild+' niet bij deze order te voegen!',
+            showDenyButton: false,
+            showCancelButton: false,
+            confirmButtonText: 'Ok',
+            allowEscapeKey: false,
+            allowOutsideClick: false
+          }) 
+    }  
+    if(res.deliveryInformation.delivery == 'Afhaalorder'){
+        let collectOrderNotify = await Swal.fire({
+            title: 'Dit is een afhaalorder',
+            text: 'Wil je afhaallabels printen of deze order als afgehaald melden?',
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: 'Afhaallabels printen',
+            denyButtonText: 'Order gereedmelden',
+            allowEscapeKey: false,
+            allowOutsideClick: false
+        })
+
+        if (false === collectOrderNotify.value){
+            
+            var markedBy = Cookies.getJSON('wp_CustomAuth').user_firstname;
+            collectedOrder({id:res.id, user:markedBy});
+            // if (window.location.pathname == '/scan/order'){
+            //     $("#input_orderid").val('');
+            // }else{
+            //     window.location.href = '/scan/order'
+            // }  
+            
+            return false;
+        }
+    }  
+
+    if(res.deliveryInformation.pickedBy !== ''){
+        let orderAlreadyPackedNotify = await Swal.fire({
+            title: 'Deze order is al ingepakt!',
+            text: res.deliveryInformation.pickedBy+' heeft deze order al ingepakt, wil je de samenstelling wijzigen?',
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: 'Ja',
+            denyButtonText: 'Nee',
+            allowEscapeKey: false,
+            allowOutsideClick: false
+        })
+
+        if (false === orderAlreadyPackedNotify.value){
+            if (window.location.pathname == '/scan/order'){
+                $("#input_orderid").val('');
+            }else{
+                window.location.href = '/scan/order'
+            }  
+            return false;
+        }
+    }
+
+    const order = JSON.stringify(res);
+    localStorage.setItem(res.id, order);
+    redirect(res);
+}
+
+function collectedOrder(order_data){
+    console.log('collectedOrderCalled');
+    console.log(order_data);
+    Swal.fire({
+        title: 'Order gereedmelden...',
+        allowEscapeKey: false,
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        didOpen: () => {
+            Swal.showLoading();
+            $.ajax({
+                type: "POST",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + Cookies.getJSON('wp_CustomAuth').token);
+                },
+                url: 'https://'+self.location.host+'/mark_collected/order',
+                data: {
+                    id: order_data.id,
+                    user: order_data.user
+                },
+                dataType: 'json',
+                success: function(data) {
+                    console.log(data);
+                    if(data.hasOwnProperty('code')){
+                        Swal.fire({
+                            title: data.code,
+                            html: data.message,
+                            showDenyButton: true,
+                            showCancelButton: false,
+                            confirmButtonText: 'Probeer opnieuw',
+                            denyButtonText: 'Annuleren',
+                            allowEscapeKey: false,
+                            allowOutsideClick: false
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                collectedOrder(order_data);
+                            }else if(result.isDenied) {
+                                window.location.href = '/scan/order';
+                            }
+                        });
+                    }else{
+                        let timerInterval;
+                        Swal.fire({
+                            icon: "success",
+                            title: "Order afgerond!",
+                            timer: 2500,
+                            timerProgressBar: true,
+                            showConfirmButton: false,
+                            allowEscapeKey: false,
+                            allowOutsideClick: false,
+                            willClose: () => {
+                                clearInterval(timerInterval);
+                            }
+                        }).then((result) => {
+                            if (result.dismiss === Swal.DismissReason.timer) {
+                                window.location.href = '/scan/order';
+                            }
+                        });
+                    }
+                }         
+            });
+        }
+    })
+}
+
+  

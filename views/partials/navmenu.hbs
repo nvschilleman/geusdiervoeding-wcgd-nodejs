@@ -1,0 +1,34 @@
+<nav class="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">WCGD-ZPL</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Overzicht <span class="sr-only">(current)</span></a>
+                </li>
+      {{!-- <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Orders
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/scan/order">Order scannen</a>
+          <a class="dropdown-item disabled" href="#">Orderlijst vandaag</a>
+        </div>
+      </li> --}}
+                <li class="nav-item">
+                    <a class="nav-link" href="/scan/order">Order scannen</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/scan/product">Product scannen</a>
+                </li>
+            </ul>
+            <span class="navbar-text">
+                <i class="fa fa-user" aria-hidden="true"></i><strong><span id="user_display_name"></span></strong>
+                <button class="btn btn-sm btn-outline-success" id="signout_button" type="button">Log uit</button>
+            </span>
+        </div>      
+  </div>
+</nav>

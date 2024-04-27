@@ -1,0 +1,37 @@
+{{#if error}}
+<script src="/js/err.js"></script>
+{{/if}}
+<script src="/js/product.js"></script>
+<script src="/js/shared.js"></script>
+<div class="container">
+    <div class="well" style="padding: 19px 19px 0px 19px;">
+        <div class="product-header">
+            {{!-- <h3 class="undertitle"><span id="delivery_method_prefix"></span><span id="delivery_method"></span></h3> --}}
+            <h2 class="product-name">{{ProductName}}</h2>
+            <h3 class="undertitle" style="margin: 5px 0 25px;">Product ID: {{ProductId}}</h3>
+            
+
+        </div>
+    </div>
+    <div class="well" id="inventories">
+        {{#if listExists}} 
+            {{#each atumLocations}}
+                <div class="inventory_container">
+                    <div class="inventory_name">{{this.name}}</div>
+                    <div class="inventory_location">{{this.location}}</div>
+                    <div class="current_stock">{{this.stock_quantity}}</div>
+                    <div class="stock_on_hold">{{this.stock_on_hold}}</div>
+                    <div class="inbound_stock">{{this.inbound_stock}}</div>
+                    <div class="current_stock_head">Voorraad</div>
+                    <div class="stock_on_hold_head">In de wacht</div>
+                    <div class="inbound_stock_head">Besteld</div>
+                </div>
+            {{/each}}
+        {{/if}}
+        <div class="d-grid gap-2 col-8 mx-auto">
+            <button type="button" id="btn_backtoscan" class="btn btn-primary">Terug naar scannen</button>
+        </div>
+    </div>
+
+
+</div>

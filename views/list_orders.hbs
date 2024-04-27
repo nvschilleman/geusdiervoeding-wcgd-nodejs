@@ -1,0 +1,64 @@
+<script src="/js/list_orders.js"></script>
+<script src="/js/shared.js"></script>
+    {{>order_list_filters}}
+
+    {{#unless hasOrders}}
+    <div style="text-align: center;" class="well">
+        <h2>Geen orders gevonden met de opgegeven criteria!</h2>
+    </div>
+    {{/unless}}
+    {{#if hasOrders}}
+    <div style="font-size: 14px;" class="panel-group list-group" id="accordion" role="tablist" aria-multiselectable="true">
+        <div class="panel panel-default">
+                <div class="list-group-item active">
+                    <div class="row no-gutters">
+                        <div class="col-4">Order ID</div>
+                        <div style="text-align:center;" class="col-4">Orderstatus</div>
+                        <div style="text-align:right;" class="col-4">Substatus</div>
+                    </div>
+                </div>
+            {{#each orders}}
+                  
+                {{!-- <a class="list-group-item" aria-expanded="false" aria-controls="{{this.orderId}}" href="#{{this.orderId}}" data-toggle="collapse"> --}}
+                <a class="list-group-item" data-bs-toggle="collapse" href="#{{this.orderId}}" aria-expanded="false" aria-controls="{{this.orderId}}"> 
+                    <div class="row no-gutters">
+                        <div style="margin: auto;" class="col-4">
+                            #{{this.orderId}}
+                            {{#unless (compare this.childOrderId '===' 0)}}
+                                <br /><mark class="combine_orderid"><span style="font-size:20px; margin: -3px; padding-right:6px;" class="mdi mdi-set-merge"></span>{{this.childOrderId}}</mark>
+                            {{/unless}}
+                        </div>
+                        <div style="margin: auto; text-align:center;" class="col-3">
+                            {{#ifeq this.orderStatusSlug "processing"}}<span style="font-size:2em;" class="mdi mdi-dots-horizontal"></span>{{/ifeq}}
+                            {{#ifeq this.orderStatusSlug "ingepakt"}}<span style="font-size:2em;" class="mdi mdi-package-variant-closed-check"></span>{{/ifeq}}
+                        </div>
+                        <div style="margin: auto; text-align:right;" class="col-5"><mark class="order_substate {{this.orderSubstateSlug}}">{{this.orderSubstate}}</mark></div>
+                    </div>
+                </a>
+                        
+                {{!-- <div class="panel-collapse collapse" id="{{this.orderId}}" role="tabpanel"> --}}
+                <div class="row no-gutters">
+                    <div class="collapse" id="{{this.orderId}}">
+                        <div class="card card-body" id="order-properties-card">
+                            <div class="col-6">
+                                <p>Naam Achternaam</p>
+                                <p>Straatnaam 14</p>
+                                <p>2222 BJ Plaatsnaam</p>
+                            </div>
+                            <div class="col-6">
+                                {{#ifeq this.orderStatusSlug "ingepakt"}}
+                                    <mark class="order_contents">
+                                        <span style="font-size:2em;" class="mdi mdi-package-variant-closed">{{this.boxAmount}}</span>
+                                        <span style="font-size:2em;" class="mdi mdi-bone">{{this.dryAmount}}</span>
+                                        <span style="font-size:2em;" class="mdi mdi-account">{{this.packedBy}}</span>
+                                    </mark>
+                                {{/ifeq}}
+                            </div>
+                        </div>       
+                    </div>
+                </div>
+            {{/each}}
+           
+        </div>    
+    </div>
+    {{/if}}

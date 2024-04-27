@@ -1,0 +1,78 @@
+$(document).ready(function(){
+    var lastResult = null, countResults = 0;
+    $.ajax({
+        type: "GET",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', 'Bearer ' + Cookies.getJSON('wp_CustomAuth').token);
+        },
+        url: 'https://'+self.location.host+'/user/home',
+        data: {},
+        success: userData,
+        dataType: 'json'
+    });
+
+    function onScanSuccess(decodedText, decodedResult) {
+        if (decodedText !== lastResult) {
+            ++countResults;
+            lastResult = decodedText;
+            console.log(`Scan result ${decodedText}`, decodedResult);
+            getOrder(decodedText);
+        }
+    }
+    
+    var html5QrcodeScanner = new Html5QrcodeScanner(
+        "qrScanner", { fps: 10, qrbox: 250 });
+    html5QrcodeScanner.render(onScanSuccess);
+
+    $('#input_orderid').keyup(function () {
+        this.value = this.value.replace(/[^0-9\.]/g,'');
+     });
+
+    $(".form-getorder").submit(function(event) {
+        event.preventDefault();
+
+        var input_orderid = $("#input_orderid").val();
+        
+
+        if (!isNumeric(input_orderid)){
+            Swal.fire({
+                title: 'Invoer niet numeriek!',
+                html: 'Alleen numerieke invoer is toegestaan.',
+                icon: 'error'
+            }).then(function() {
+                $("#input_orderid").val('');
+        });;
+        }else{
+          
+            getOrder(input_orderid);
+        }
+    });
+
+    $('span#html5-qrcode-anchor-scan-type-change').removeClass('btn btn-lg btn-primary');
+
+});
+
+function isNumeric(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+  }
+
+function userData(res){
+    if(res.success) {
+        console.log('UserData');
+        // console.log(Cookies.getJSON('wp_CustomAuth'));
+        // if(Cookies.getJSON('wp_CustomAuth').user_role !== 'administrator'){
+        //     flushSession(true);
+        // }
+    }
+    else {
+        flushSession(true);
+    }
+}
+
+function flushSession(isTokenError) {
+    Cookies.remove('wp_CustomAuth');
+    if(isTokenError) { window.location.href="/signin?s=1"; } // s=1 token failure (alert signin header notification)
+    else{ window.location.href = "/signin"; }
+}
+
+
