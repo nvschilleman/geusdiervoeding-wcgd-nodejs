@@ -13,6 +13,7 @@
         "product_api_endpoint": ""
     },
     "zpl_printer": {
-        "print_endpoint" : ""
+        "print_endpoint" : "",
+        "test" : "test"
     }
 }
