@@ -37,14 +37,6 @@ app.get('/order', function (req, res) {
     res.render('order');
 });
 
-// app.get('/list/orders', function (req, res) {
-//     res.render('list_orders');
-// });
-
-// app.get('/view/product', function (req, res) {
-//     res.render('product');
-// });
-
 app.get('/scan/product', function (req, res) {
     res.render('scan_product');
 });
@@ -52,12 +44,6 @@ app.get('/scan/product', function (req, res) {
 app.get('/scan/order', function (req, res) {
     res.render('scan_order');
 });
-
-// app.get('/view/product/:productSku', function (req, res) {
-//     res.send(req.params);
-//     res.render('product');
-//     console.log(req.params);
-// });
 
 app.get('/signin', function (req, res) {
     // res.render('signin');
@@ -127,10 +113,6 @@ app.post('/get/order', app_userValidate, function (req, res) {
         if(!orderError) {
             res.json(orderSuccess);
             console.log('getOrderSuccess')
-            // console.log('success');
-            // console.log(res);
-            // console.log('json');
-            // console.log(orderSuccess);
         }
         else {
             res.json(orderError);
@@ -177,9 +159,3 @@ app.post('/label/print', function (req, res) {
         }
     });
 });
-
-/*
-    We can run the req.headers.authorization token thru a validation check
-    If vaidation OK , the API will return the results.
-    If validation FAIL, the user will need to re-auth with /user/auth and then send a new token and re-try
-*/

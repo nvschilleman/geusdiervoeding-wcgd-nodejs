@@ -1,5 +1,5 @@
 
-$(document).ready(function(){
+$(function() {
     window.location.href = '/scan/product';
 });
 

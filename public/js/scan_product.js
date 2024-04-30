@@ -1,5 +1,4 @@
-$(document).ready(function(){
-
+$(function() {
     var lastResult = null, countResults = 0;
 
     $.ajax({
@@ -13,10 +12,6 @@ $(document).ready(function(){
         dataType: 'json'
     });
     
-
-
-
-
     var html5QrcodeScanner = new Html5QrcodeScanner(
         "barcodeScanner", { fps: 10, qrbox: {width: 300, height: 150} });
 

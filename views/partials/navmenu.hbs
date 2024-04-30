@@ -9,22 +9,22 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="/">Overzicht <span class="sr-only">(current)</span></a>
                 </li>
-      {{!-- <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Orders
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="/scan/order">Order scannen</a>
-          <a class="dropdown-item disabled" href="#">Orderlijst vandaag</a>
-        </div>
-      </li> --}}
                 <li class="nav-item">
                     <a class="nav-link" href="/scan/order">Order scannen</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/scan/product">Product scannen</a>
                 </li>
-            </ul>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Management
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="#">Server update</a></li>
+                        <li><a class="dropdown-item" href="#">ZPL-REST</a></li>
+                    </ul>
+                </li>
+            </ul>        
             <span class="navbar-text">
                 <i class="fa fa-user" aria-hidden="true"></i><strong><span id="user_display_name"></span></strong>
                 <button class="btn btn-sm btn-outline-success" id="signout_button" type="button">Log uit</button>

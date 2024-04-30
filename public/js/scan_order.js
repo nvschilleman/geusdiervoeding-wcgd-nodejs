@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(function() {
     var lastResult = null, countResults = 0;
     $.ajax({
         type: "GET",
@@ -11,17 +11,20 @@ $(document).ready(function(){
         dataType: 'json'
     });
 
+    var html5QrcodeScanner = new Html5QrcodeScanner(
+        "qrScanner", { fps: 10, qrbox: 250 });
+
     function onScanSuccess(decodedText, decodedResult) {
         if (decodedText !== lastResult) {
             ++countResults;
             lastResult = decodedText;
             console.log(`Scan result ${decodedText}`, decodedResult);
+            html5QrcodeScanner.clear();
             getOrder(decodedText);
+           
         }
     }
-    
-    var html5QrcodeScanner = new Html5QrcodeScanner(
-        "qrScanner", { fps: 10, qrbox: 250 });
+
     html5QrcodeScanner.render(onScanSuccess);
 
     $('#input_orderid').keyup(function () {
@@ -43,7 +46,6 @@ $(document).ready(function(){
                 $("#input_orderid").val('');
         });;
         }else{
-          
             getOrder(input_orderid);
         }
     });

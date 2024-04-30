@@ -1,5 +1,4 @@
-$(document).ready(function(){
-
+$(function() {
     $.ajax({
         type: "GET",
         beforeSend: function (xhr) {
@@ -10,10 +9,10 @@ $(document).ready(function(){
         success: userData,
         dataType: 'json'
     });
+
+    $('#user_firstname').text(Cookies.getJSON('wp_CustomAuth').user_display_name);
     
 });
-
-
 
 function userData(res){
     if(res.success) {

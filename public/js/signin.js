@@ -42,7 +42,7 @@ function userAuth_result(res){
     }
 }
 
-$(document).ready(function(){
+$(function() {
 
     // Notification alerts on signin page
     if(location.search.match('s=1')){

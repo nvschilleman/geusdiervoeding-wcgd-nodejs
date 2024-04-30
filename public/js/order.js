@@ -1,8 +1,5 @@
-
-$(document).ready(function(){
-
+$(function() {
     const order_id = getUrlParameter('id');
-    
     const orderStr = localStorage.getItem(order_id);
     let order = JSON.parse(orderStr);
 
@@ -42,11 +39,6 @@ $(document).ready(function(){
             prepareOrderUpdate(order_id, labelQuantity);     
         }  
     });
-
-
-
-
-
 });
 
 function prepareOrderUpdate(order_id, labelQuantity){
@@ -214,6 +206,7 @@ function printOrderLabel(order_id){
                             }
                         }).then((result) => {
                             if (result.dismiss === Swal.DismissReason.timer) {
+                                localStorage.clear();
                                 window.location.href = '/scan/order';
                             }
                         });
