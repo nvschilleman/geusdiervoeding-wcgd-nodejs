@@ -34,7 +34,7 @@ module.exports = function(request,cb) {
             error.response.data = {error: {errno:504, message: "ZPL-REST connection timeout"}};
         }
 
-        cb(error.response, null);
+        cb(error.response.data, null);
     });
 }
 
