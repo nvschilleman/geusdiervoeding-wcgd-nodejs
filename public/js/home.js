@@ -10,7 +10,7 @@ $(function() {
         dataType: 'json'
     });
 
-    $('#user_firstname').text(Cookies.getJSON('wp_CustomAuth').user_display_name);
+    $('#user_firstname').text(Cookies.getJSON('wp_CustomAuth').user_firstname);
     
 });
 

@@ -1,6 +1,8 @@
 var appConfig = require('../config.json'),
     axios = require('axios');
 
+
+
 function newAbortSignal(timeoutMs) {
     const abortController = new AbortController();
     setTimeout(() => abortController.abort(), timeoutMs || 0);
@@ -15,9 +17,10 @@ module.exports = function(request,cb) {
     axios.post(appConfig.zpl_printer.print_endpoint, {
         printer:request.printer_id, 
         label: request.label_id,
-        data: request.data,
-        timeout: 6000,
-        signal: newAbortSignal(6000)
+        data: request.data },
+        {
+            timeout: 6000,
+            signal: newAbortSignal(6000)
     })
 
     .then(function (response) {
