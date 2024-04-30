@@ -28,8 +28,8 @@ module.exports = function(request,cb) {
         cb(null, response.data);
     })
     .catch(function (error) {
-        // console.log(error.response.data);
-        cb(error.response.data, null);
+        console.log(error);
+        cb(null, null);
     });
 }
 
