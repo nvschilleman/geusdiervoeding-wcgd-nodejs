@@ -29,6 +29,11 @@ module.exports = function(request,cb) {
     })
     .catch(function (error) {
         console.log(error.response);
+
+        if(error.response.data === undefined){
+            error.response.data = {error: {errno:504, message: "ZPL-REST connection timeout"}};
+        }
+
         cb(error.response, null);
     });
 }
