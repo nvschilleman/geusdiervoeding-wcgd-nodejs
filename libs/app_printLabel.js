@@ -19,8 +19,8 @@ module.exports = function(request,cb) {
         label: request.label_id,
         data: request.data },
         {
-            timeout: 6000,
-            signal: newAbortSignal(6000)
+            timeout: 10000,
+            signal: newAbortSignal(5000)
     })
 
     .then(function (response) {
@@ -28,8 +28,8 @@ module.exports = function(request,cb) {
         cb(null, response.data);
     })
     .catch(function (error) {
-        console.log(error);
-        cb(null, null);
+        console.log(error.response);
+        cb(error.response, null);
     });
 }
 
