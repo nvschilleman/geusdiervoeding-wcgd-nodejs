@@ -30,7 +30,7 @@ module.exports = function(request,cb) {
     .catch(function (error) {
         console.log(error.response);
 
-        if(error.response.data === undefined){
+        if(!('data' in error.response)){
             error.response.data = {error: {errno:504, message: "ZPL-REST connection timeout"}};
         }
 
