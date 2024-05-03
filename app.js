@@ -112,7 +112,8 @@ app.post('/get/order', app_userValidate, function (req, res) {
     app_orderPage(req, function(orderError, orderSuccess){
         if(!orderError) {
             res.json(orderSuccess);
-            console.log('getOrderSuccess')
+            console.log('getOrderSuccess');
+            console.log(orderSuccess);
         }
         else {
             res.json(orderError);

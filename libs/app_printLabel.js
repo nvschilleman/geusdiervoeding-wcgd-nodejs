@@ -9,17 +9,29 @@ function newAbortSignal(timeoutMs) {
 
 module.exports = function(request,cb) {
     console.log('printLabel');
-    console.log(request);
-    axios.post(appConfig.zpl_printer.print_endpoint, {
-        printer:request.printer_id, 
-        label: request.label_id,
-        data: request.data },
-        {
-            timeout: 4500,
-            signal: newAbortSignal(4000)
+
+    if (request.hasOwnProperty('tripNumber')){
+        console.log('routeOrder');
+        label_id = appConfig.zpl_printer.delivery_label_id;
+    }else{
+        console.log('localPickupOrder');
+        label_id = appConfig.zpl_printer.localpickup_label_id;
+    }
+
+    const request_body = {
+        printer_id: appConfig.zpl_printer.printer_id,
+        label_id: label_id,
+        data: request
+    }
+
+    axios.post(appConfig.zpl_printer.print_endpoint, { request_body }, {
+        timeout: 4500,
+        signal: newAbortSignal(4000)
     })
 
     .then(function (response) {
+        console.log('printResponse');
+        console.log(response.data);
         cb(null, response.data);
     })
     .catch(function (error) {

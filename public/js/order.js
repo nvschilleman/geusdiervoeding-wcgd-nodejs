@@ -7,6 +7,7 @@ $(function() {
         console.log('orderNull');
         order = getOrder(order_id);
     }else{
+        console.log('orderCached');
         orderData(order);
     }
 
@@ -116,42 +117,28 @@ function updateOrder(order_data){
 function printOrderLabel(order_id){
     const orderStr = localStorage.getItem(order_id);
     let order = JSON.parse(orderStr);
-    console.log('printOrderLabel')
-    console.log(order);
-    let print_data;
 
-    if ('Afhaalorder' === order.deliveryInformation.delivery){
+    let print_data = {
+        boxAmount: order.deliveryInformation.boxAmount,
+        dryAmount: order.deliveryInformation.dryAmount,
+        pickedBy: order.deliveryInformation.pickedBy,
+        orderId: order.id,
+        qrId: order.id,
+        deliveryDate: order.deliveryInformation.deliveryDate,
+        name: order.contactInformation.name,
+        mobilePhone: order.contactInformation.mobilePhone,
+        labelAmount: order.labelQuantity
+    };
+
+    if ('Afhaalorder' !== order.deliveryInformation.delivery){
         print_data = {
-            printer_id: "8e154dc512974f4dbad656b67201d0f8",
-            label_id: "a0fd73990d9e44b0bce559590d5b6b76",
-            data: {
-                boxAmount: order.deliveryInformation.boxAmount,
-                dryAmount: order.deliveryInformation.dryAmount,
-                pickedBy: order.deliveryInformation.pickedBy,
-                orderId: order.id,
-                deliveryDate: order.deliveryInformation.deliveryDate,
-                name: order.contactInformation.name,
-                labelAmount: order.labelQuantity
-            }
-        };
-    }else{
-        print_data = {
-            printer_id: "8e154dc512974f4dbad656b67201d0f8",
-            label_id: "489b81e6d6df4586a54f951623966c91",
-            data: {
-                boxAmount: order.deliveryInformation.boxAmount,
-                dryAmount: order.deliveryInformation.dryAmount,
-                pickedBy: order.deliveryInformation.pickedBy,
-                orderId: order.id,
-                deliveryDate: order.deliveryInformation.deliveryDate,
-                tripNumber: order.deliveryInformation.tripNumber,
-                name: order.contactInformation.name,
-                address: order.addressInformation.address,
-                postcode: order.addressInformation.postcode,
-                cityName: order.addressInformation.cityName,
-                mobilePhone: order.contactInformation.mobilePhone,
-                labelAmount: order.labelQuantity
-            }
+            ...print_data,
+            tripNumber: order.deliveryInformation.tripNumber,
+            leaveParcel: order.deliveryInformation.leaveParcel,
+            deliveryComments: order.deliveryInformation.deliveryComments,
+            address: order.addressInformation.address,
+            postcode: order.addressInformation.postcode,
+            cityName: order.addressInformation.cityName,    
         };
     }
 
