@@ -13,7 +13,7 @@ var express = require('express'),
     app_markCollected = require('./libs/app_markCollected.js');
     app_printLabel = require('./libs/app_printLabel.js');
 
-app.engine( 'hbs', hbs( { 
+app.engine( 'hbs', hbs.engine( { 
     extname: 'hbs', 
     defaultLayout: 'main', 
     helpers: require('./libs/handlebars-helpers.js').helpers,
@@ -51,8 +51,6 @@ app.get('/signin', function (req, res) {
 });
  
 app.listen(3000);
-
-// Custom API -- Validate the Wordpress user account 
 
 app.post('/user/auth', function (req, res) {
     app_userAuth(req.body, function(authError,authSuccess) {
@@ -144,7 +142,6 @@ app.post('/mark_collected/order', app_userValidate, function (req, res) {
         }
         else {
             res.json(markCollectedError);
-            console.log(markCollectedError);
             console.log('MARK_COLLECTED_ERROR');
         }
     });
@@ -153,6 +150,7 @@ app.post('/mark_collected/order', app_userValidate, function (req, res) {
 app.post('/label/print', function (req, res) {
     app_printLabel(req.body, function(printError,printSuccess) {
         if(!printError) {
+            console.log('printCallbackSuccess');
             res.json(printSuccess);
         }
         else {
