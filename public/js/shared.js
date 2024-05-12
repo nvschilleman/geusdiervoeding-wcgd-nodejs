@@ -76,9 +76,8 @@ $(document).ready(function(){
 });
 
 function redirect(res){
-    console.log('PathName');
-    console.log(window.location.pathname);
-    if (window.location.pathname == '/scan/order'){
+    console.log('Pathname '+window.location.pathname);
+    if (window.location.pathname == '/scan/order' || window.location.pathname == '/list/orders' ){
         window.location.href = "/order?id="+res.id;
     }else{
         orderData(res);

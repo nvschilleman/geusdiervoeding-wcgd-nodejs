@@ -12,7 +12,8 @@
         <div class="panel panel-default">
                 <div class="list-group-item active">
                     <div class="row no-gutters">
-                        <div class="col-4">Order ID</div>
+                        <div class="col-1">Stop #</div>
+                        <div class="col-3">Order ID</div>
                         <div style="text-align:center;" class="col-4">Orderstatus</div>
                         <div style="text-align:right;" class="col-4">Substatus</div>
                     </div>
@@ -22,7 +23,12 @@
                 {{!-- <a class="list-group-item" aria-expanded="false" aria-controls="{{this.orderId}}" href="#{{this.orderId}}" data-toggle="collapse"> --}}
                 <a class="list-group-item" data-bs-toggle="collapse" href="#{{this.orderId}}" aria-expanded="false" aria-controls="{{this.orderId}}"> 
                     <div class="row no-gutters">
-                        <div style="margin: auto;" class="col-4">
+                        <div style="margin: auto;" class="col-1">
+                            {{#ifnoteq this.routigoStopNum ""}}
+                            <mark class="routigo_stopnum">{{this.routigoStopNum}}</mark>
+                            {{/ifnoteq}}
+                        </div>
+                        <div style="margin: auto;" class="col-3">
                             #{{this.orderId}}
                             {{#unless (compare this.childOrderId '===' 0)}}
                                 <br /><mark class="combine_orderid"><span style="font-size:20px; margin: -3px; padding-right:6px;" class="mdi mdi-set-merge"></span>{{this.childOrderId}}</mark>
@@ -44,6 +50,10 @@
                                 <p>Naam Achternaam</p>
                                 <p>Straatnaam 14</p>
                                 <p>2222 BJ Plaatsnaam</p>
+                            <br />
+                            {{#ifnoteq this.orderStatusSlug "completed"}}
+                                <button onclick="getOrder({{this.orderId}});" class="btn btn-sm btn-outline-success">Labels afdrukken</a>
+                            {{/ifnoteq}}
                             </div>
                             <div class="col-6">
                                 {{#ifeq this.orderStatusSlug "ingepakt"}}
