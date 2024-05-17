@@ -36,14 +36,14 @@ $(function() {
     console.log(params);
     console.log(options);
 
-
+    $("button#clearAllFilters").on('click', function(e) {
+        e.preventDefault();
+        window.location.href='/list/orders';
+    });
     
     $("#substateDropMenu li a").on('click', function(e) {      
         e.preventDefault();
-        var selText = $(this).html();
         options.substate = $(this).attr('id');
-        // console.log(options);
-        // $("#substateDropBtn").text(selText);
         applyFilter();
       });
 

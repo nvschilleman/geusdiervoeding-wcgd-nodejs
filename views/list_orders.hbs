@@ -12,9 +12,9 @@
         <div class="panel panel-default">
                 <div class="list-group-item active">
                     <div class="row no-gutters">
-                        <div class="col-1" id="stopNumColHead">Stop #</div>
-                        <div class="col-3">Order ID</div>
-                        <div style="text-align:center;" class="col-4">Orderstatus</div>
+                        <div class="col-1" id="stopNumColHead">#</div>
+                        <div class="col-3">ID</div>
+                        <div style="text-align:center;" class="col-4">Status</div>
                         <div style="text-align:right;" class="col-4">Substatus</div>
                     </div>
                 </div>
@@ -28,7 +28,7 @@
                             <mark class="routigo_stopnum">{{this.routigoStopNum}}</mark>
                             {{/ifnoteq}}
                         </div>
-                        <div style="margin: auto;" class="col-3">
+                        <div style="margin: auto; font-weight:bold;" class="col-3">
                             #{{this.orderId}}
                             {{#unless (compare this.childOrderId '===' 0)}}
                                 <br /><mark class="combine_orderid"><span style="font-size:20px; margin: -3px; padding-right:6px;" class="mdi mdi-set-merge"></span>{{this.childOrderId}}</mark>
@@ -44,30 +44,39 @@
                 </a>
                         
                 {{!-- <div class="panel-collapse collapse" id="{{this.orderId}}" role="tabpanel"> --}}
-                <div class="row no-gutters">
                     <div class="collapse" id="{{this.orderId}}">
                         <div class="card card-body" id="order-properties-card">
-                            <div class="col-6">
-                                <p>Naam Achternaam</p>
-                                <p>Straatnaam 14</p>
-                                <p>2222 BJ Plaatsnaam</p>
-                            <br />
-                            {{#ifnoteq this.orderStatusSlug "completed"}}
-                                <button onclick="getOrder({{this.orderId}});" class="btn btn-sm btn-outline-success">Labels afdrukken</a>
-                            {{/ifnoteq}}
-                            </div>
-                            <div class="col-6">
-                                {{#ifeq this.orderStatusSlug "ingepakt"}}
-                                    <mark class="order_contents">
-                                        <span style="font-size:2em;" class="mdi mdi-package-variant-closed">{{this.boxAmount}}</span>
-                                        <span style="font-size:2em;" class="mdi mdi-bone">{{this.dryAmount}}</span>
-                                        <span style="font-size:2em;" class="mdi mdi-account">{{this.packedBy}}</span>
-                                    </mark>
-                                {{/ifeq}}
+                            <div class="row no-gutters">
+                                <div class="col-6">
+                                    <fieldset class="customerData">
+                                        <legend class="legend">Klantdetails</legend>
+                                        {{this.customerData.name}}<br />
+                                        {{this.customerData.address}}<br />
+                                        {{this.customerData.postcode}}&nbsp;{{this.customerData.cityName}}
+                                    </fieldset>
+
+                                
+
+                                </div>
+                                <div class="col-6">
+                                    {{#ifeq this.orderStatusSlug "ingepakt"}}
+                                        <mark class="order_contents">
+                                            <span style="font-size:2em;" class="mdi mdi-package-variant-closed">{{this.boxAmount}}</span>
+                                            <span style="font-size:2em;" class="mdi mdi-bone">{{this.dryAmount}}</span>
+                                            <span style="font-size:2em;" class="mdi mdi-account">{{this.packedBy}}</span>
+                                        </mark>
+                                    {{/ifeq}}
+                                </div>
+                                <div style="margin-top: .2em;" class="col-12">
+                                    {{#ifnoteq this.orderStatusSlug "completed"}}
+                                        <button onclick="getOrder({{this.orderId}});" class="btn btn-sm btn-outline-success">Labels afdrukken</button>
+                                    {{/ifnoteq}}
+                                    <button disabled="disabled" class="btn btn-sm btn-outline-secondary">Order picken</a>
+                                </div>
                             </div>
                         </div>       
                     </div>
-                </div>
+          
             {{/each}}
            
         </div>    

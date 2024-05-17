@@ -133,10 +133,18 @@ async function getOrderResult(res){
             confirmButtonText: 'Afhaallabels printen',
             denyButtonText: 'Order gereedmelden',
             allowEscapeKey: false,
-            allowOutsideClick: false
+            allowOutsideClick: true
         })
 
-        if (false === collectOrderNotify.value){
+        if(typeof collectOrderNotify.value === 'undefined') {
+            if (window.location.pathname == '/scan/order'){
+                window.location.href = '/scan/order';
+            }
+            console.log('collectOrderNotify dismissed');
+            return false;
+        }
+        
+        if(typeof collectOrderNotify.value === 'boolean' && collectOrderNotify.value === false) {
             
             var markedBy = Cookies.getJSON('wp_CustomAuth').user_firstname;
             collectedOrder({id:res.id, user:markedBy});
@@ -162,12 +170,8 @@ async function getOrderResult(res){
             allowOutsideClick: false
         })
 
-        if (false === orderAlreadyPackedNotify.value){
-            if (window.location.pathname == '/scan/order'){
-                $("#input_orderid").val('');
-            }else{
-                window.location.href = '/scan/order'
-            }  
+        if (false === orderAlreadyPackedNotify.value){   
+            window.location.href = '/scan/order'
             return false;
         }
     }
