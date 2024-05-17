@@ -4,11 +4,6 @@ $(function() {
     } );  
 });   
 
-function flushSession(isTokenError) {
-    Cookies.remove('wp_CustomAuth');
-    if(isTokenError) { window.location.href="/signin?s=1"; } // s=1 token failure (alert signin header notification)
-    else{ window.location.href = "/signin"; }
-}
 
 
 

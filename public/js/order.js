@@ -2,14 +2,7 @@ $(function() {
     const order_id = getUrlParameter('id');
     const orderStr = localStorage.getItem(order_id);
     let order = JSON.parse(orderStr);
-
-    if(order === null){
-        console.log('orderNull');
-        order = getOrder(order_id);
-    }else{
-        console.log('orderCached');
-        orderData(order);
-    }
+    orderData(order);
 
     $('#dry_quantity_input').niceNumber({autoSize:false});
     $('#box_quantity_input').niceNumber({autoSize:false});
@@ -193,7 +186,7 @@ function printOrderLabel(order_id){
                             }
                         }).then((result) => {
                             if (result.dismiss === Swal.DismissReason.timer) {
-                                localStorage.clear();
+                                // localStorage.clear();
                                 window.location.href = '/scan/order';
                             }
                         });
@@ -205,14 +198,6 @@ function printOrderLabel(order_id){
 }
 
 function orderData(res){
-
-        const storedOrder = localStorage.getItem(res.id);
-        
-        if(storedOrder === null){
-            const order = JSON.stringify(res);
-            localStorage.setItem(res.id, order);
-            console.log('No stored order found')
-        }
 
         $('#delivery_method_prefix').text('Route ');
         $('#delivery_date_title').text('Bezorgdatum ');
@@ -237,14 +222,4 @@ function orderData(res){
         $('#trip_number').text(res.deliveryInformation.tripNumber);
         $('#dry_quantity_input').prop("value", res.deliveryInformation.dryAmount);
         $('#box_quantity_input').prop("value", res.deliveryInformation.boxAmount);
-    }       
-
-function flushSession(isTokenError) {
-    Cookies.remove('wp_CustomAuth');
-    if(isTokenError) { window.location.href="/signin?s=1"; } // s=1 token failure (alert signin header notification)
-    else{ window.location.href = "/signin"; }
-}
-
-
-
-
+    }

@@ -48,7 +48,7 @@ $(function() {
     if(location.search.match('s=1')){
         $('.alert-info').css('visibility','visible').html(
             '<i class="fa fa-key" style="padding-right:3px" aria-hidden="true"></i>' +
-            '<strong>You have been signed out</strong> for account security reasons! Please sign in again.'
+            '<strong>Je bent uitgelogd</strong> vanwege veiligheidsredenen. Log opnieuw in alsjeblieft.'
         );
     }
 

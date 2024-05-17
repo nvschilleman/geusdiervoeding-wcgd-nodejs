@@ -47,19 +47,32 @@ function toastNotification(msg){
 
 
 function getOrder(order_id){
-    showLoading();
-    $.ajax({
-        type: "POST",
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader('Authorization', 'Bearer ' + Cookies.getJSON('wp_CustomAuth').token);
-        },
-        url: 'https://'+self.location.host+'/get/order',
-        data: {
-            id: order_id 
-        },
-        success: getOrder_result,
-        dataType: 'json'
-    });
+
+    const localStorage_order = localStorage.getItem(order_id);
+    let order = JSON.parse(localStorage_order);
+
+    if(order === null){
+        console.log('orderNull');
+        showLoading();
+        $.ajax({
+            type: "POST",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + Cookies.getJSON('wp_CustomAuth').token);
+            },
+            url: 'https://'+self.location.host+'/get/order',
+            data: {
+                id: order_id 
+            },
+            success: getOrderResult,
+            dataType: 'json'
+        });
+    }else{
+        console.log('orderCached');
+        console.log(order);
+        getOrderResult(order);
+    }
+    
+
 }
 
 $(document).ready(function(){
@@ -84,8 +97,8 @@ function redirect(res){
     }   
 }
 
-async function getOrder_result(res){
-    console.log('getOrderResult');
+async function getOrderResult(res){
+    console.log('getOrderAsync');
     console.log(res);
     let icon = 'error';
     if(res.hasOwnProperty('code')){
@@ -227,6 +240,12 @@ function collectedOrder(order_data){
             });
         }
     })
+}
+
+function flushSession(isTokenError) {
+    Cookies.remove('wp_CustomAuth');
+    if(isTokenError) { window.location.href="/signin?s=1"; } // s=1 token failure (alert signin header notification)
+    else{ window.location.href = "/signin"; }
 }
 
   

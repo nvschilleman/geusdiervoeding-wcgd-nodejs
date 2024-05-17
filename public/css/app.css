@@ -393,4 +393,15 @@ div.inventory_container:nth-child(even){
     max-width: 100%; 
 }
 
+/* div#stopNumCol{
+    display: unset;
+}
+
+div#stopNumColHead{
+    display: unset;
+} */
+
+#statusDropBtn, #substateDropBtn, #sortbyDropBtn{
+    width: 100%;
+}
     

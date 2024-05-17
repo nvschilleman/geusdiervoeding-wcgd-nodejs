@@ -11,8 +11,11 @@ $(function() {
         dataType: 'json'
     });
 
-    var html5QrcodeScanner = new Html5QrcodeScanner(
-        "qrScanner", { fps: 10, qrbox: 250 });
+    var html5QrcodeScanner = new Html5QrcodeScanner("qrScanner", {
+        fps: 10,
+        qrbox: 250,
+        rememberLastUsedCamera: true
+        });
 
     function onScanSuccess(decodedText, decodedResult) {
         if (decodedText !== lastResult) {
@@ -69,12 +72,6 @@ function userData(res){
     else {
         flushSession(true);
     }
-}
-
-function flushSession(isTokenError) {
-    Cookies.remove('wp_CustomAuth');
-    if(isTokenError) { window.location.href="/signin?s=1"; } // s=1 token failure (alert signin header notification)
-    else{ window.location.href = "/signin"; }
 }
 
 

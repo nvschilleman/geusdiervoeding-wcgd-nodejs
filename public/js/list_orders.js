@@ -25,13 +25,21 @@ $(function() {
         options.status = params.status;
     }
 
+    if (params.sortby != 'trip'){
+        $( "div#stopNumCol" ).hide( "slow" );
+        $( "div#stopNumColHead" ).hide( "slow" );
+    }else{
+        $( "div#stopNumCol" ).show( "slow" );
+        $( "div#stopNumColHead" ).show( "slow" );
+    }
+
     console.log(params);
     console.log(options);
 
 
     
     $("#substateDropMenu li a").on('click', function(e) {      
-        e.preventDefault(); // cancel the link behaviour
+        e.preventDefault();
         var selText = $(this).html();
         options.substate = $(this).attr('id');
         // console.log(options);
@@ -40,7 +48,7 @@ $(function() {
       });
 
     $("#statusDropMenu li a").on('click', function(e) {      
-        e.preventDefault(); // cancel the link behaviour
+        e.preventDefault(); 
         var selText = $(this).html();
         options.status = $(this).attr('id');
         // console.log(options);
@@ -49,17 +57,13 @@ $(function() {
       });
 
     $("#sortbyDropMenu li a").on('click', function(e) {      
-        e.preventDefault(); // cancel the link behaviour
+        e.preventDefault(); 
         var selText = $(this).html();
         options.sortby = $(this).attr('id');
         // console.log(options);
         // $("#sortbyDropBtn").text(selText);
         applyFilter();
       });
-
-    // $("input#datepicker").change(function() {      
-
-    // });
 
       $('#datepicker').datepicker({
         format: 'dd-mm-yyyy',
@@ -75,9 +79,6 @@ $(function() {
                 options.date = input_date;
                 applyFilter();
             }
-
-            // options.date = moment(input_date, 'DD-MM-YYYY');
-            // applyFilter();
         }
     });
 
@@ -85,38 +86,8 @@ $(function() {
         date = options.date.format('YYYYMMDD');
         window.location.href='/list/orders?date='+date+'&sortby='+options.sortby+'&status='+options.status+'&substate='+options.substate;
     }
-
-    // console.log('docReady');
-    // $.ajax({
-    //     type: "GET",
-    //     beforeSend: function (xhr) {
-    //         xhr.setRequestHeader('Authorization', 'Bearer ' + Cookies.getJSON('wp_CustomAuth').token);
-    //     },
-    //     url: 'https://'+self.location.host+'/get/orderlist?date=20240302&substate=afhaal',
-    //     success: listOrders,
-    //     dataType: 'json'
-    // });
 });
 
-function listOrders(res){
-    console.log('listOrders');
-    console.log(res);
-    // if(res.success) {
-        // console.log('UserData');
-        // console.log(Cookies.getJSON('wp_CustomAuth'));
-        // if(Cookies.getJSON('wp_CustomAuth').user_role !== 'administrator'){
-        //     flushSession(true);
-        // }
-    // }
-    // else {
-        // flushSession(true);
-    // }
-}
 
-function flushSession(isTokenError) {
-    Cookies.remove('wp_CustomAuth');
-    if(isTokenError) { window.location.href="/signin?s=1"; } // s=1 token failure (alert signin header notification)
-    else{ window.location.href = "/signin"; }
-}
 
 

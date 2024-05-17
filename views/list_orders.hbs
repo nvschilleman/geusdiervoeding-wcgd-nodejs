@@ -12,7 +12,7 @@
         <div class="panel panel-default">
                 <div class="list-group-item active">
                     <div class="row no-gutters">
-                        <div class="col-1">Stop #</div>
+                        <div class="col-1" id="stopNumColHead">Stop #</div>
                         <div class="col-3">Order ID</div>
                         <div style="text-align:center;" class="col-4">Orderstatus</div>
                         <div style="text-align:right;" class="col-4">Substatus</div>
@@ -23,7 +23,7 @@
                 {{!-- <a class="list-group-item" aria-expanded="false" aria-controls="{{this.orderId}}" href="#{{this.orderId}}" data-toggle="collapse"> --}}
                 <a class="list-group-item" data-bs-toggle="collapse" href="#{{this.orderId}}" aria-expanded="false" aria-controls="{{this.orderId}}"> 
                     <div class="row no-gutters">
-                        <div style="margin: auto;" class="col-1">
+                        <div style="margin: auto;" id="stopNumCol" class="col-1">
                             {{#ifnoteq this.routigoStopNum ""}}
                             <mark class="routigo_stopnum">{{this.routigoStopNum}}</mark>
                             {{/ifnoteq}}
@@ -37,6 +37,7 @@
                         <div style="margin: auto; text-align:center;" class="col-3">
                             {{#ifeq this.orderStatusSlug "processing"}}<span style="font-size:2em;" class="mdi mdi-dots-horizontal"></span>{{/ifeq}}
                             {{#ifeq this.orderStatusSlug "ingepakt"}}<span style="font-size:2em;" class="mdi mdi-package-variant-closed-check"></span>{{/ifeq}}
+                            {{#ifeq this.orderStatusSlug "completed"}}<span style="font-size:2em;" class="mdi mdi-checkbox-marked-circle-outline"></span>{{/ifeq}}
                         </div>
                         <div style="margin: auto; text-align:right;" class="col-5"><mark class="order_substate {{this.orderSubstateSlug}}">{{this.orderSubstate}}</mark></div>
                     </div>

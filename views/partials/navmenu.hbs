@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark">
+<nav style="margin-bottom: 1.5em;" class="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">WCGD-ZPL</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
@@ -9,8 +9,14 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="/">Overzicht <span class="sr-only">(current)</span></a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/scan/order">Order scannen</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarOrderDrop" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Orders
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarOrderDrop">
+                        <li><a class="dropdown-item" href="/scan/order">Order scannen</a></li>
+                        <li><a class="dropdown-item" href="/list/orders">Orderlijst</a></li>
+                    </ul>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/scan/product">Product scannen</a>
@@ -20,8 +26,8 @@
                         Management
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="http://192.168.1.190:3030">Services</a></li>
-                        <li><a class="dropdown-item" href="http://192.168.1.190:7070">ZPL-REST</a></li>
+                        <li><a class="dropdown-item" href="http://192.168.1.56:3030">Services</a></li>
+                        <li><a class="dropdown-item" href="http://192.168.1.56:7070">ZPL-REST</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a style="font-size:small;" class="dropdown-item" href="#">Management werkt alleen lokaal!</a></li>
                     </ul>

@@ -1,9 +1,9 @@
-<div class="d-grid">
+<div style="margin-bottom:1em;" class="container">
 <form class="row">
 
-    <div class="col-sm-6 col-lg-3">
+    <div style="margin-bottom:0.5em;" class="col-6 col-lg-3">
         <div id="substateDropdown" class="dropdown">
-            <button id="substateDropBtn" class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <button id="substateDropBtn" class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     Substatus
                     <span class="substateDropTxt"></span>
             </button>
@@ -17,9 +17,9 @@
             </ul>
         </div>
     </div>
-    <div class="col-sm-6 col-lg-3">
+    <div style="margin-bottom:0.5em;" class="col-6 col-lg-3">
         <div id="statusDropdown" class="dropdown">
-            <button id="statusDropBtn" class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <button id="statusDropBtn" class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     Orderstatus
                     <span class="statusDropTxt"></span>
             </button>
@@ -30,17 +30,17 @@
             </ul>
         </div>
     </div> 
-    <div class="col-sm-6 col-lg-3">
+    <div class="col-6 col-lg-3">
             <input type="text" placeholder="Leverdatum" class="form-control" id="datepicker"/>
     </div>
-    <div class="col-sm-6 col-lg-3">
+    <div class="col-6 col-lg-3">
         <div id="sortbyDropdown" class="dropdown">
-            <button id="sortbyDropBtn" class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <button id="sortbyDropBtn" class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     Sorteren op
                     <span class="sortbyDropTxt"></span>
             </button>
             <ul id="sortbyDropMenu" class="dropdown-menu">
-                <li><a id="date" class="dropdown-item" href="#">Leverdatum</a></li>
+                {{!-- <li><a id="date" class="dropdown-item" href="#">Leverdatum</a></li> --}}
                 <li><a id="substate" class="dropdown-item" href="#">Substatus</a></li>
                 <li><a id="trip" class="dropdown-item" href="#">Ritnummer</a></li>
             </ul>
