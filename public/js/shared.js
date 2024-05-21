@@ -102,28 +102,70 @@ async function getOrderResult(res){
     console.log(res);
     let icon = 'error';
     if(res.hasOwnProperty('code')){
-        if (res.data.status == 303){
-            icon = 'info';
+        if (res.code == 'see_parent_order'){
+            Swal.fire({
+                title: 'Zie hoofdorder!',
+                html: res.message,
+                showDenyButton: false,
+                showCancelButton: true,
+                cancelButtonText: 'Annuleren',
+                confirmButtonText: 'Hoofdorder openen',
+                allowEscapeKey: false,
+                allowOutsideClick: false
+              }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href='/order?id='+res.data.parent_id+'&swr=1'
+                } else if (result.isDismissed) {
+                    if (window.location.pathname == '/scan/order'){
+                        window.location.href = '/scan/order';
+                    }
+                }
+              })
+        }else{
+            Swal.fire({
+                title: res.code,
+                html: res.message,
+                icon: 'error'
+            });
         }
-        Swal.fire({
-            title: res.code,
-            html: res.message,
-            icon: icon
-          });
     return;
     }
 
     if(res.combineOrderChild !== null && res.combineOrderChild !== undefined && res.combineOrderChild !== ''){
-        let result = await Swal.fire({
-            title: 'Dit is een combi order!',
-            text: 'Vergeet de artikelen van order #'+res.combineOrderChild+' niet bij deze order te voegen!',
-            showDenyButton: false,
+        if(!location.search.match('swr=1')){
+            let result = await Swal.fire({
+                title: 'Dit is een combi order!',
+                text: 'Vergeet de artikelen van order #'+res.combineOrderChild+' niet bij deze order te voegen!',
+                showDenyButton: false,
+                showCancelButton: false,
+                confirmButtonText: 'Ok',
+                allowEscapeKey: false,
+                allowOutsideClick: false
+            })
+        } 
+    }  
+
+    if(res.deliveryInformation.pickedBy !== ''){
+        let orderAlreadyPackedNotify = await Swal.fire({
+            title: 'Deze order is al ingepakt!',
+            text: res.deliveryInformation.pickedBy+' heeft deze order al ingepakt, wil je de samenstelling wijzigen?',
+            showDenyButton: true,
             showCancelButton: false,
-            confirmButtonText: 'Ok',
+            confirmButtonText: 'Ja',
+            denyButtonText: 'Nee',
             allowEscapeKey: false,
             allowOutsideClick: false
-          }) 
-    }  
+        })
+
+        if (false === orderAlreadyPackedNotify.value){   
+            if (window.location.pathname == '/scan/order'){
+                window.location.href = '/scan/order';
+            }
+            console.log('alreadyPackedNotify dismissed');
+            return false;
+        }
+    }
+
     if(res.deliveryInformation.delivery == 'Afhaalorder'){
         let collectOrderNotify = await Swal.fire({
             title: 'Dit is een afhaalorder',
@@ -157,24 +199,6 @@ async function getOrderResult(res){
             return false;
         }
     }  
-
-    if(res.deliveryInformation.pickedBy !== ''){
-        let orderAlreadyPackedNotify = await Swal.fire({
-            title: 'Deze order is al ingepakt!',
-            text: res.deliveryInformation.pickedBy+' heeft deze order al ingepakt, wil je de samenstelling wijzigen?',
-            showDenyButton: true,
-            showCancelButton: false,
-            confirmButtonText: 'Ja',
-            denyButtonText: 'Nee',
-            allowEscapeKey: false,
-            allowOutsideClick: false
-        })
-
-        if (false === orderAlreadyPackedNotify.value){   
-            window.location.href = '/scan/order'
-            return false;
-        }
-    }
 
     const order = JSON.stringify(res);
     localStorage.setItem(res.id, order);

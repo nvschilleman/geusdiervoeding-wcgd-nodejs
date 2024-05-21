@@ -2,7 +2,15 @@ $(function() {
     const order_id = getUrlParameter('id');
     const orderStr = localStorage.getItem(order_id);
     let order = JSON.parse(orderStr);
-    orderData(order);
+
+    if(order === null){
+        console.log('getOrderCalled');
+        order = getOrder(order_id);
+    }else{
+        orderData(order);
+    }
+    
+    // orderData(order);
 
     $('#dry_quantity_input').niceNumber({autoSize:false});
     $('#box_quantity_input').niceNumber({autoSize:false});
@@ -203,6 +211,10 @@ function orderData(res){
         $('#delivery_date_title').text('Bezorgdatum ');
         $('#trip_number').text(res.deliveryInformation.tripNumber);
 
+        if ( res.deliveryInformation.tripNumber == '' ){
+            $('#tripnumber').text('Stopnummer handmatig op label schrijven');
+        }
+
         if ( res.deliveryInformation.delivery == 'Afhaalorder' ){
             $('#delivery_method_prefix').text('');
             $('#delivery_date_title').text('Afhaaldatum ');
@@ -219,7 +231,6 @@ function orderData(res){
         $('#cityName').text(res.addressInformation.cityName);
         $('#emailAddress').text(res.contactInformation.email);
         $('#mobilePhone').text(res.contactInformation.mobilePhone);
-        $('#trip_number').text(res.deliveryInformation.tripNumber);
         $('#dry_quantity_input').prop("value", res.deliveryInformation.dryAmount);
         $('#box_quantity_input').prop("value", res.deliveryInformation.boxAmount);
     }
