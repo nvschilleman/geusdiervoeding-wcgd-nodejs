@@ -1,4 +1,3 @@
-console.log('HelpersFile Loaded');
 var register = function(Handlebars) {
     var helpers = {
       compare: function (variableOne, comparator, variableTwo) {

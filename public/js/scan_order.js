@@ -1,4 +1,7 @@
 $(function() {
+
+    sessionStorage.setItem('returnUrl', '/scan/order');
+
     var lastResult = null, countResults = 0;
     $.ajax({
         type: "GET",

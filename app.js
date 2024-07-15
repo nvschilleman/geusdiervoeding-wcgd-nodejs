@@ -8,6 +8,8 @@ var express = require('express'),
     app_userHome = require('./libs/app_userHome.js');
     app_productPage = require('./libs/app_productPage.js');
     app_orderPage = require('./libs/app_orderPage.js');
+    app_pickOrderPage = require('./libs/app_pickOrderPage.js');
+    app_packingSlipData = require('./libs/app_packingSlipData.js');
     app_updateOrder = require('./libs/app_updateOrder.js');
     app_listOrderPage = require('./libs/app_listOrderPage.js');
     app_markCollected = require('./libs/app_markCollected.js');
@@ -85,6 +87,37 @@ app.get('/view/product/:productSku', function (req, res) {
         }
     });
 });
+
+app.get('/view/order/:orderId', function (req, res) {
+    app_pickOrderPage(req, function(pickOrderError, pickOrderSuccess){
+        
+        if(!pickOrderError) {
+            res.render('pick_order', {orderId: pickOrderSuccess.id, customerInfo: pickOrderSuccess.billing, orderItems: pickOrderSuccess.line_items, childOrderId: pickOrderSuccess.child_order_id, childOrderItems: pickOrderSuccess.child_order});
+            // console.log(pickOrderSuccess);
+        } else {
+            // res.json(productPageError);
+            res.render('pick_order', {error:pickOrderError});
+            console.log(pickOrderError);
+            console.log('pickOrderError');
+        }
+    });
+});
+
+app.get('/get/packing_slip_data/:orderId', app_userValidate, function (req, res) {
+    app_packingSlipData(req, function(dataError, dataSuccess){
+        if(!dataError) {
+            res.json(dataSuccess);
+            console.log('getDataSuccess');
+            console.log(dataSuccess);
+        }
+        else {
+            res.json(dataError);
+            console.log('getDataError');
+        }
+    });
+});
+
+
 
 app.get('/list/orders', function (req, res) {
     app_listOrderPage(req, function(listOrdersError, listOrders){

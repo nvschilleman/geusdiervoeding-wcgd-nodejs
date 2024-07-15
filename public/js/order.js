@@ -103,7 +103,7 @@ function updateOrder(order_data){
                             } else if (result.isDenied) {
                                 printOrderLabel(order_data.id);
                             } else if (result.isDismissed) {
-                                window.location.href="/scan/order";
+                                window.location.href=getReturnUrl();
                             }
                           })
                     }else{
@@ -176,7 +176,7 @@ function printOrderLabel(order_id){
                             if (result.isConfirmed) {
                                 printOrderLabel(order_id);
                             } else if (result.isDismissed) {
-                                window.location.href="/scan/order";
+                                window.location.href=getReturnUrl();
                             }
                           })
                     }else{
@@ -195,7 +195,7 @@ function printOrderLabel(order_id){
                         }).then((result) => {
                             if (result.dismiss === Swal.DismissReason.timer) {
                                 // localStorage.clear();
-                                window.location.href = '/scan/order';
+                                window.location.href = getReturnUrl();
                             }
                         });
                     }

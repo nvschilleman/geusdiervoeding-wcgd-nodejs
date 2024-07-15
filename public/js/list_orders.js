@@ -1,9 +1,15 @@
 $(function() {
+    
+    let filter_url = sessionStorage.getItem('filterUrl');
+    if(!filter_url){
+        filter_url = '/list/orders';
+    }
+
+    sessionStorage.setItem('returnUrl', filter_url);
+
     let options = {date: '', substate: '', status: '', sortby: ''};
     const params = {date: getUrlParameter('date'), sortby: getUrlParameter('sortby'), substate: getUrlParameter('substate'), status: getUrlParameter('status') };
-
-    console.log(params);
-
+    
     if (!params.date){
         options.date = moment();
     }else{
@@ -33,11 +39,9 @@ $(function() {
         $( "div#stopNumColHead" ).show( "slow" );
     }
 
-    console.log(params);
-    console.log(options);
-
     $("button#clearAllFilters").on('click', function(e) {
         e.preventDefault();
+        sessionStorage.removeItem('filterUrl');
         window.location.href='/list/orders';
     });
     
@@ -84,7 +88,9 @@ $(function() {
 
     function applyFilter() {
         date = options.date.format('YYYYMMDD');
-        window.location.href='/list/orders?date='+date+'&sortby='+options.sortby+'&status='+options.status+'&substate='+options.substate;
+        filter_url = '/list/orders?date='+date+'&sortby='+options.sortby+'&status='+options.status+'&substate='+options.substate;
+        sessionStorage.setItem('filterUrl', filter_url);
+        window.location.href=filter_url;
     }
 });
 

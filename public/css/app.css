@@ -376,9 +376,13 @@ div.inventory_container:nth-child(even){
     max-width: 100%;
 }
 
-.order_substate.afhaal {
-    color: rgb(0, 0, 0);
+.afhaal {
+    color: rgb(0, 0, 0)!important;
     background: #eea722;
+}
+
+.leiden, .hague, .zmeer, .rdam, .rdam-z{
+    background: #1473a1;
 }
 
 .combine_orderid {
@@ -422,4 +426,8 @@ legend.legend {
     line-height: inherit;
     text-transform: uppercase;
     letter-spacing: .15em;
+}
+
+.gj-icon{
+    top:.30rem!important;
 }

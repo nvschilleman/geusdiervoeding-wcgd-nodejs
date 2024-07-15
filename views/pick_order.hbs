@@ -1,0 +1,124 @@
+{{#if error}}
+<div class="alert alert-danger" role="alert">
+    <b>Foutmelding:</b>&nbsp;{{error.message}}
+</div>
+{{/if}}
+<script src="/js/shared.js"></script>
+{{#unless error}}
+<script src="/js/pick_order.js"></script>
+<div class="container mb-5">
+    <div class="col-xl-6 mb-4">
+        <div class="card p-0">
+            <div class="card-body p-2">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <div class="ms-0">
+                            <p class="text-muted mb-0" style="font-size:0.7em;">Order ID</p>
+                            <p class="fw-bold mb-1">#<span id="order_id">{{orderId}}</span></p>
+                            {{#unless childOrderId}}
+                                <br />
+                                <br />
+                            {{/unless}}                       
+                            {{#if childOrderId}} 
+                                <p class="text-muted mb-0" style="font-size:0.7em;">Combiorder ID</p>
+                                <p class="fw-bold mb-1">#{{childOrderId}}</p>
+                            {{/if}}
+                            <p class="text-muted mb-0" style="font-size:0.7em;">Indien geen voorraad</p>
+                            <p id="nostockselect" class="fw-bold mb-1">Laden...</p>
+                        </div>
+                    </div>
+
+                    <div class="position-absolute top-0 end-0 m-2">
+                        <div class="d-flex align-items-end flex-column">
+                            <span class="badge rounded-pill border border-secondary text-secondary mb-1" id="delivery_date">Laden...</span>
+                            <span class="badge rounded-pill bg-success mb-1" id="order_status">Laden...</span>
+                            <span class="badge rounded-pill bg-dark" id="delivery_method">Laden...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <div class="card-footer border-0 bg-body-tertiary p-2 d-flex justify-content-around">
+          <a class="btn btn-sm btn-link m-0 text-reset" data-bs-toggle="collapse" href="#customer_info" role="button" aria-expanded="false" aria-controls="customer_info" >Klantdetails</a>
+          <a class="btn btn-sm btn-link m-0 text-reset" href="#" role="button" >Ordernotities</a>
+        </div>
+        <div class="collapse p-3" id="customer_info">
+            <p class="mb-1">{{customerInfo.first_name}}&nbsp;{{customerInfo.last_name}}</p>
+            <p class="mb-1">{{customerInfo.address_1}}</p>
+            <p class="mb-1">{{customerInfo.postcode}}&nbsp;{{customerInfo.city}}</p>
+        </div>
+      </div>
+    </div>
+  <ul class="list-group list-group-light">
+    {{#each orderItems}}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center">
+          <input class="form-check-input" type="checkbox" value="" id="checkbox{{this.id}}" />
+          <label class="form-check-label" for="checkbox{{this.id}}">
+          <div class="ms-3">
+          <p class="fw-bold mb-0">{{this.quantity}}x&nbsp;{{#unless this.parent_name}}{{this.name}}{{/unless}}{{#if this.parent_name}}{{this.parent_name}}{{/if}}</p>
+          <p class="fs-6 fw-light fst-italic mb-1">Gewicht {{this.product_weight}}kg</p>
+          <p class="text-muted mb-0"> SKU:&nbsp;{{this.sku}}</p>
+        </div>
+      </div>
+      </label>
+      <span class="badge bg-primary rounded-pill">{{this.atum_location}}</span>
+    </li>
+    {{/each}}
+    {{#if childOrderId}}
+    <li class="list-group-item d-flex justify-content-center">
+      <div class="d-flex align-items-center">
+        <div>
+        <p class="mb-0">Artikelen van combiorder #{{childOrderId}}</p>
+        </div>
+      </div>
+    </li>
+    {{#each childOrderItems}}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center">
+          <input class="form-check-input" type="checkbox" value="" id="checkbox{{this.id}}" />
+          <label class="form-check-label" for="checkbox{{this.id}}">
+          <div class="ms-3">
+          <p class="fw-bold mb-0">{{this.quantity}}x&nbsp;{{#unless this.parent_name}}{{this.name}}{{/unless}}{{#if this.parent_name}}{{this.parent_name}}{{/if}}</p>
+          <p class="fs-6 fw-light fst-italic mb-1">Gewicht {{this.product_weight}}kg</p>
+          <p class="text-muted mb-0"> SKU:&nbsp;{{this.sku}}</p>
+        </div>
+      </div>
+      </label>
+      <span class="badge bg-primary rounded-pill">{{this.atum_location}}</span>
+    </li>
+    {{/each}}
+    {{/if}}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      {{#unless childOrderId}}
+      <div class="d-flex align-items-center">
+          <div class="ms-3">
+          <p class="fw-bold mb-0">Totaal artikelen:&nbsp;<span id="quantities"></span></p>
+          <p class="fw-bold mb-0">Totaal gewicht:&nbsp;<span id="order_weight"></span>kg</p>
+        </div>
+      </div>
+      {{/unless}}
+      {{#if childOrderId}}
+      <div class="d-flex align-items-center">
+          <div class="ms-3">
+          <p class="fw-bold mb-0">Totaal artikelen hoofdorder:&nbsp;<span id="quantities"></span></p>
+          <p class="fw-bold mb-0">Totaal gewicht hoofdorder:&nbsp;<span id="order_weight"></span>kg</p>
+          <p class="fw-bold mb-0">Totaal artikelen combiorder:&nbsp;<span id="child_quantities"></span></p>
+          <p class="fw-bold mb-0">Totaal gewicht combiorder:&nbsp;<span id="child_order_weight"></span>kg</p>
+          <p class="fw-bold mb-0">Eindtotaal artikelen:&nbsp;<span id="combined_quantities"></span></p>
+          <p class="fw-bold mb-0">Eindtotaal gewicht:&nbsp;<span id="combined_order_weight"></span>kg</p>
+        </div>
+      </div>
+      {{/if}}  
+    </li>    
+
+  </ul>   
+</div>
+
+<div class="footer fixed-bottom bg-light py-2 px-4 btn-group">
+
+  <a href="#" id="orderListUrlBtn" class="btn btn-sm btn-outline-primary">Terug naar orderlijst</a>
+
+  <a href="#" onclick="event.preventDefault(); getOrder({{orderId}})" class="btn btn-sm btn-outline-primary">Labels printen</a>
+</div>
+
+{{/unless}}

@@ -3,12 +3,12 @@
     {{>order_list_filters}}
 
     {{#unless hasOrders}}
-    <div style="text-align: center;" class="well">
-        <h2>Geen orders gevonden met de opgegeven criteria!</h2>
-    </div>
+        <div class="alert alert-info" role="alert">
+        <b>Melding:</b>&nbsp;geen orders gevonden die voldoen aan opgegeven criteria!
+        </div>
     {{/unless}}
     {{#if hasOrders}}
-    <div style="font-size: 14px;" class="panel-group list-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel-group list-group" id="accordion" role="tablist" aria-multiselectable="true">
         <div class="panel panel-default">
                 <div class="list-group-item active">
                     <div class="row no-gutters">
@@ -35,11 +35,11 @@
                             {{/unless}}
                         </div>
                         <div style="margin: auto; text-align:center;" class="col-3">
-                            {{#ifeq this.orderStatusSlug "processing"}}<span style="font-size:2em;" class="mdi mdi-dots-horizontal"></span>{{/ifeq}}
-                            {{#ifeq this.orderStatusSlug "ingepakt"}}<span style="font-size:2em;" class="mdi mdi-package-variant-closed-check"></span>{{/ifeq}}
-                            {{#ifeq this.orderStatusSlug "completed"}}<span style="font-size:2em;" class="mdi mdi-checkbox-marked-circle-outline"></span>{{/ifeq}}
+                            <span class="badge bg-primary rounded-pill">{{this.orderStatus}}</span>
                         </div>
-                        <div style="margin: auto; text-align:right;" class="col-5"><mark class="order_substate {{this.orderSubstateSlug}}">{{this.orderSubstate}}</mark></div>
+                        <div style="margin: auto; text-align:right;" class="col-5">
+                            <span class="badge {{this.orderSubstateSlug}} rounded-pill">{{this.orderSubstate}}</span>
+                        </div>
                     </div>
                 </a>
                         
@@ -59,19 +59,14 @@
 
                                 </div>
                                 <div class="col-6">
-                                    {{#ifeq this.orderStatusSlug "ingepakt"}}
-                                        <mark class="order_contents">
-                                            <span style="font-size:2em;" class="mdi mdi-package-variant-closed">{{this.boxAmount}}</span>
-                                            <span style="font-size:2em;" class="mdi mdi-bone">{{this.dryAmount}}</span>
-                                            <span style="font-size:2em;" class="mdi mdi-account">{{this.packedBy}}</span>
-                                        </mark>
-                                    {{/ifeq}}
+                                    &nbsp;
                                 </div>
                                 <div style="margin-top: .2em;" class="col-12">
                                     {{#ifnoteq this.orderStatusSlug "completed"}}
-                                        <button onclick="getOrder({{this.orderId}});" class="btn btn-sm btn-outline-success">Labels afdrukken</button>
+                                        <a class="btn btn-sm btn-outline-success" href="/view/order/{{this.orderId}}" role="button">Order picken</a>
+                                        <button onclick="getOrder({{this.orderId}});" class="btn btn-sm btn-outline-secondary">Labels afdrukken</button>
                                     {{/ifnoteq}}
-                                    <button disabled="disabled" class="btn btn-sm btn-outline-secondary">Order picken</a>
+                                    
                                 </div>
                             </div>
                         </div>       
