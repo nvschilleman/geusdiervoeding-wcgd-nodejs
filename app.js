@@ -92,13 +92,17 @@ app.get('/view/order/:orderId', function (req, res) {
     app_pickOrderPage(req, function(pickOrderError, pickOrderSuccess){
         
         if(!pickOrderError) {
-            res.render('pick_order', {orderId: pickOrderSuccess.id, customerInfo: pickOrderSuccess.billing, orderItems: pickOrderSuccess.line_items, childOrderId: pickOrderSuccess.child_order_id, childOrderItems: pickOrderSuccess.child_order});
+            var lineItems = pickOrderSuccess.line_items.sort((a, b) => a.atum_location.localeCompare(b.atum_location, undefined, { numeric: true, sensitivity: 'base'}));
+
+            if(pickOrderSuccess.child_order){
+                var childLineItems = pickOrderSuccess.child_order.sort((a, b) => a.atum_location.localeCompare(b.atum_location, undefined, { numeric: true, sensitivity: 'base'}));
+            }
+
+            res.render('pick_order', {orderId: pickOrderSuccess.id, customerInfo: pickOrderSuccess.billing, orderItems: lineItems, childOrderId: pickOrderSuccess.child_order_id, childOrderItems: childLineItems});
             // console.log(pickOrderSuccess);
         } else {
             // res.json(productPageError);
             res.render('pick_order', {error:pickOrderError});
-            console.log(pickOrderError);
-            console.log('pickOrderError');
         }
     });
 });
