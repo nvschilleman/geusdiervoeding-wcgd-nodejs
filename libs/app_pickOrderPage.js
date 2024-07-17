@@ -18,7 +18,7 @@ module.exports = function(request,cb) {
     .catch(function (error) {
         console.log('pickOrderError');
         // console.log(error.response.data);
-        cb(error.response.data, null);
+        cb(error.response, null);
     });
     // cb(null,null);
 }
