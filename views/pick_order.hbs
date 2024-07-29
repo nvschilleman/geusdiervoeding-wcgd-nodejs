@@ -23,6 +23,16 @@
                                 <p class="text-muted mb-0" style="font-size:0.7em;">Combiorder ID</p>
                                 <p class="fw-bold mb-1">#{{childOrderId}}</p>
                             {{/if}}
+                            {{#ifnoteq customerNote ""}}
+                              <p class="text-muted mb-0" style="font-size:0.7em;">Klantnotitie</p>
+                              <p class="fw-bold mb-1">{{customerNote}}</p>
+                            {{/ifnoteq}}
+                            {{#if childOrderId}}
+                              {{#ifnoteq childOrderCustomerNote ""}}
+                                <p class="text-muted mb-0" style="font-size:0.7em;">Klantnotitie combiorder</p>
+                                <p class="fw-bold mb-1">{{childOrderCustomerNote}}</p>
+                              {{/ifnoteq}}
+                            {{/if}}
                             <p class="text-muted mb-0" style="font-size:0.7em;">Indien geen voorraad</p>
                             <p id="nostockselect" class="fw-bold mb-1">Laden...</p>
                         </div>
