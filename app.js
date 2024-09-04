@@ -93,13 +93,10 @@ app.get('/view/order/:orderId', function (req, res) {
         
         if(!pickOrderError) {
             var lineItems = pickOrderSuccess.line_items.sort((a, b) => a.atum_location.localeCompare(b.atum_location, undefined, { numeric: true, sensitivity: 'base'}));
-
             if(pickOrderSuccess.child_order){
                 var childLineItems = pickOrderSuccess.child_order.sort((a, b) => a.atum_location.localeCompare(b.atum_location, undefined, { numeric: true, sensitivity: 'base'}));
             }
-
             res.render('pick_order', {orderId: pickOrderSuccess.id, customerInfo: pickOrderSuccess.billing, customerNote: pickOrderSuccess.customer_note, orderItems: lineItems, childOrderId: pickOrderSuccess.child_order_id, childOrderCustomerNote: pickOrderSuccess.child_order_customer_note, childOrderItems: childLineItems});
-            // console.log(pickOrderSuccess);
         } else {
             // res.json(productPageError);
             res.render('pick_order', {error:pickOrderError});
