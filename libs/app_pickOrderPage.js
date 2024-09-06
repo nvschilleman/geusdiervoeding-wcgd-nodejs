@@ -5,7 +5,7 @@ module.exports = function(request,cb) {
     
     console.log('pickOrderPage');
 
-    axios.get(appConfig.wcgd.pick_order_endpoint + request.params.orderId, {
+    axios.get(appConfig.wcgd.orders_endpoint + request.params.orderId, {
         "headers": {
             'Authorization': appConfig.wordpress.static_token
         }

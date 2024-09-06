@@ -67,8 +67,11 @@
                                 </div>
                                 <div style="margin-top: .2em;" class="col-12">
                                     {{#ifnoteq this.orderStatusSlug "completed"}}
-                                        <a class="btn btn-sm btn-outline-success" href="/view/order/{{this.orderId}}" role="button">Order picken</a>
-                                        <button onclick="getOrder({{this.orderId}});" class="btn btn-sm btn-outline-secondary">Labels afdrukken</button>
+                                        <a class="btn btn-sm btn-outline-success mt-1" href="/order/{{this.orderId}}" role="button">Order picken</a>
+                                        <button onclick="getOrder({{this.orderId}});" class="btn btn-sm btn-outline-secondary mt-1">Labels afdrukken</button>
+                                        {{#ifeq this.orderSubstateSlug "afhaal"}}
+                                        <button onclick="collectedOrder({{this.orderId}});" class="btn btn-sm btn-primary mt-1">Afgehaald melden</button>
+                                        {{/ifeq}}
                                     {{/ifnoteq}}
                                     
                                 </div>

@@ -13,6 +13,8 @@ var express = require('express'),
     app_updateOrder = require('./libs/app_updateOrder.js');
     app_listOrderPage = require('./libs/app_listOrderPage.js');
     app_markCollected = require('./libs/app_markCollected.js');
+    app_getOrderNotes = require('./libs/app_getOrderNotes.js');
+    app_postOrderNote = require('./libs/app_postOrderNote.js');
     app_printLabel = require('./libs/app_printLabel.js');
 
 app.engine( 'hbs', hbs.engine( { 
@@ -35,9 +37,9 @@ app.get('/', function (req, res) {
     res.render('home');
 });
 
-app.get('/order', function (req, res) {
-    res.render('order');
-});
+// app.get('/order', function (req, res) {
+//     res.render('order');
+// });
 
 app.get('/scan/product', function (req, res) {
     res.render('scan_product');
@@ -88,7 +90,7 @@ app.get('/view/product/:productSku', function (req, res) {
     });
 });
 
-app.get('/view/order/:orderId', function (req, res) {
+app.get('/order/:orderId', function (req, res) {
     app_pickOrderPage(req, function(pickOrderError, pickOrderSuccess){
         
         if(!pickOrderError) {
@@ -96,10 +98,10 @@ app.get('/view/order/:orderId', function (req, res) {
             if(pickOrderSuccess.child_order){
                 var childLineItems = pickOrderSuccess.child_order.sort((a, b) => a.atum_location.localeCompare(b.atum_location, undefined, { numeric: true, sensitivity: 'base'}));
             }
-            res.render('pick_order', {orderId: pickOrderSuccess.id, customerInfo: pickOrderSuccess.billing, customerNote: pickOrderSuccess.customer_note, orderItems: lineItems, childOrderId: pickOrderSuccess.child_order_id, childOrderCustomerNote: pickOrderSuccess.child_order_customer_note, childOrderItems: childLineItems});
+            res.render('order', {orderId: pickOrderSuccess.id, customerInfo: pickOrderSuccess.billing, customerNote: pickOrderSuccess.customer_note, orderItems: lineItems, childOrderId: pickOrderSuccess.child_order_id, childOrderCustomerNote: pickOrderSuccess.child_order_customer_note, childOrderItems: childLineItems});
         } else {
             // res.json(productPageError);
-            res.render('pick_order', {error:pickOrderError});
+            res.render('order', {error:pickOrderError});
         }
     });
 });
@@ -114,6 +116,20 @@ app.get('/get/packing_slip_data/:orderId', app_userValidate, function (req, res)
         else {
             res.json(dataError);
             console.log('getDataError');
+        }
+    });
+});
+
+app.get('/get/order_notes/:orderId', app_userValidate, function (req, res) {
+    app_getOrderNotes(req, function(dataError, dataSuccess){
+        if(!dataError) {
+            res.json(dataSuccess);
+            console.log('getNotesSuccess');
+            console.log(dataSuccess);
+        }
+        else {
+            res.json(dataError);
+            console.log('getNotesError');
         }
     });
 });
@@ -164,6 +180,20 @@ app.post('/update/order', app_userValidate, function (req, res) {
             res.json(updateError);
             console.log(updateError);
             console.log('UPDATE_ERROR');
+        }
+    });
+});
+
+app.post('/post/order_note/:orderId', app_userValidate, function (req, res) {
+    app_postOrderNote(req, function(postNoteError, postNoteSuccess){
+        if(!postNoteError) {
+            res.json(postNoteSuccess);
+            console.log('PostNoteSuccess')
+        }
+        else {
+            res.json(postNoteError);
+            console.log(postNoteError);
+            console.log('postNoteError');
         }
     });
 });

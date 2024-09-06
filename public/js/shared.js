@@ -53,7 +53,9 @@ function getOrder(order_id){
 
     if(order === null){
         console.log('orderNull');
-        showLoading();
+        if (window.location.pathname == '/scan/order' || window.location.pathname == '/list/orders'){
+            showLoading();
+        }
         $.ajax({
             type: "POST",
             beforeSend: function (xhr) {
@@ -92,8 +94,8 @@ $(function() {
 
 function redirect(res){
     console.log('Pathname '+window.location.pathname);
-    if (window.location.pathname == '/scan/order' || window.location.pathname == '/list/orders' || window.location.pathname.startsWith('/view/order') ){
-        window.location.href = "/order?id="+res.id;
+    if (window.location.pathname == '/scan/order' || window.location.pathname == '/list/orders'){
+        window.location.href = "/order/"+res.id+'?view=packages';
     }else{
         orderData(res);
     }   
@@ -133,19 +135,19 @@ async function getOrderResult(res){
     return;
     }
 
-    if(res.combineOrderChild !== null && res.combineOrderChild !== undefined && res.combineOrderChild !== ''){
-        if(!location.search.match('swr=1')){
-            let result = await Swal.fire({
-                title: 'Dit is een combi order!',
-                text: 'Vergeet de artikelen van order #'+res.combineOrderChild+' niet bij deze order te voegen!',
-                showDenyButton: false,
-                showCancelButton: false,
-                confirmButtonText: 'Ok',
-                allowEscapeKey: false,
-                allowOutsideClick: false
-            })
-        } 
-    }  
+    // if(res.combineOrderChild !== null && res.combineOrderChild !== undefined && res.combineOrderChild !== ''){
+    //     if(!location.search.match('swr=1')){
+    //         let result = await Swal.fire({
+    //             title: 'Dit is een combi order!',
+    //             text: 'Vergeet de artikelen van order #'+res.combineOrderChild+' niet bij deze order te voegen!',
+    //             showDenyButton: false,
+    //             showCancelButton: false,
+    //             confirmButtonText: 'Ok',
+    //             allowEscapeKey: false,
+    //             allowOutsideClick: false
+    //         })
+    //     } 
+    // }  
 
     if(res.deliveryInformation.pickedBy !== ''){
         let orderAlreadyPackedNotify = await Swal.fire({
@@ -168,39 +170,39 @@ async function getOrderResult(res){
         }
     }
 
-    if(res.deliveryInformation.delivery == 'Afhaalorder'){
-        let collectOrderNotify = await Swal.fire({
-            title: 'Dit is een afhaalorder',
-            text: 'Wil je afhaallabels printen of deze order als afgehaald melden?',
-            showDenyButton: true,
-            showCancelButton: false,
-            confirmButtonText: 'Afhaallabels printen',
-            denyButtonText: 'Order gereedmelden',
-            allowEscapeKey: false,
-            allowOutsideClick: true
-        })
+    // if(res.deliveryInformation.delivery == 'Afhaalorder'){
+    //     let collectOrderNotify = await Swal.fire({
+    //         title: 'Dit is een afhaalorder',
+    //         text: 'Wil je afhaallabels printen of deze order als afgehaald melden?',
+    //         showDenyButton: true,
+    //         showCancelButton: false,
+    //         confirmButtonText: 'Afhaallabels printen',
+    //         denyButtonText: 'Order gereedmelden',
+    //         allowEscapeKey: false,
+    //         allowOutsideClick: true
+    //     })
 
-        if(typeof collectOrderNotify.value === 'undefined') {
-            if (window.location.pathname == '/scan/order'){
-                window.location.href = '/scan/order';
-            }
-            console.log('collectOrderNotify dismissed');
-            return false;
-        }
+    //     if(typeof collectOrderNotify.value === 'undefined') {
+    //         if (window.location.pathname == '/scan/order'){
+    //             window.location.href = '/scan/order';
+    //         }
+    //         console.log('collectOrderNotify dismissed');
+    //         return false;
+    //     }
         
-        if(typeof collectOrderNotify.value === 'boolean' && collectOrderNotify.value === false) {
+    //     if(typeof collectOrderNotify.value === 'boolean' && collectOrderNotify.value === false) {
             
-            var markedBy = Cookies.getJSON('wp_CustomAuth').user_firstname;
-            collectedOrder({id:res.id, user:markedBy});
-            // if (window.location.pathname == '/scan/order'){
-            //     $("#input_orderid").val('');
-            // }else{
-            //     window.location.href = '/scan/order'
-            // }  
+    //         var markedBy = Cookies.getJSON('wp_CustomAuth').user_firstname;
+    //         collectedOrder({id:res.id, user:markedBy});
+    //         // if (window.location.pathname == '/scan/order'){
+    //         //     $("#input_orderid").val('');
+    //         // }else{
+    //         //     window.location.href = '/scan/order'
+    //         // }  
             
-            return false;
-        }
-    }  
+    //         return false;
+    //     }
+    // }  
 
     const order = JSON.stringify(res);
     localStorage.setItem(res.id, order);
@@ -215,10 +217,9 @@ function getReturnUrl(){
     return return_url;
 }
 
-function collectedOrder(order_data){
-
+function collectedOrder(order_id){
     console.log('collectedOrderCalled');
-    console.log(order_data);
+    var user = Cookies.getJSON('wp_CustomAuth').user_firstname;
     Swal.fire({
         title: 'Order gereedmelden...',
         allowEscapeKey: false,
@@ -233,13 +234,14 @@ function collectedOrder(order_data){
                 },
                 url: 'https://'+self.location.host+'/mark_collected/order',
                 data: {
-                    id: order_data.id,
-                    user: order_data.user
+                    id: order_id,
+                    user: user
                 },
                 dataType: 'json',
                 success: function(data) {
                     console.log(data);
                     if(data.hasOwnProperty('code')){
+                        
                         Swal.fire({
                             title: data.code,
                             html: data.message,
@@ -271,7 +273,8 @@ function collectedOrder(order_data){
                             }
                         }).then((result) => {
                             if (result.dismiss === Swal.DismissReason.timer) {
-                                window.location.href = getReturnUrl();
+                                // window.location.href = getReturnUrl();
+                                location.reload();
                             }
                         });
                     }

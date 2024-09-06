@@ -6,41 +6,44 @@ module.exports = function(request,cb) {
     
     console.log('getOrderList');
 
-    console.log(request.query.date);
-
     let params = {date: request.query.date, sortby: request.query.sortby, status:request.query.status, substate:request.query.substate};
 
-    console.log(params);
+    // console.log(params);
 
-    if (params.date == undefined && params.date == null) {
-        var date = new Date();
-        params.date = moment(date).format('YYYYMMDD'); 
+    if (params.date == undefined && params.date == null || params.date == '') {
+        delete params.date;
     }
 
-    var sortbyparam = '&sortby='+params.sortby;
+    // var sortbyparam = '&sortby='+params.sortby;
 
     if (params.sortby == undefined && params.sortby == null || params.sortby == '') {
-        sortbyparam = '';     
+        delete params.sortby;   
     }
 
-    var statusparam = '&status='+params.status;
+    // var statusparam = '&status='+params.status;
 
     if (params.status == undefined && params.status == null || params.status == '') {
-        statusparam = '';     
+        delete params.status;    
     }
 
-    var substateparam = '&substate='+params.substate;
+    // var substateparam = '&substate='+params.substate;
 
     if (params.substate == undefined && params.substate == null || params.substate == '') {
-        substateparam = '';     
+        delete params.substate;    
     }
 
-    console.log('ApiUrl: '+appConfig.wcgd.list_order_endpoint + '?date=' + params.date + sortbyparam + statusparam + substateparam);
+    // console.log('ApiUrl: '+appConfig.wcgd.list_order_endpoint + '?date=' + params.date + sortbyparam + statusparam + substateparam);
 
-    axios.get(appConfig.wcgd.list_order_endpoint + '?date=' + params.date + sortbyparam + statusparam + substateparam, {
-        "headers": {
+    // axios.get(appConfig.wcgd.list_order_endpoint + '?date=' + params.date + sortbyparam + statusparam + substateparam, {
+    //     "headers": {
+    //         'Authorization': appConfig.wordpress.static_token
+    //     }
+    // })
+    axios.get(appConfig.wcgd.list_order_endpoint, {
+        headers: {
             'Authorization': appConfig.wordpress.static_token
-        }
+        },
+        params: params
     })
     .then(function (response) {
         console.log('ListOrdersSuccess');

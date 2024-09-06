@@ -8,12 +8,15 @@ $(function() {
     sessionStorage.setItem('returnUrl', filter_url);
 
     let options = {date: '', substate: '', status: '', sortby: ''};
+    var datepicker_value;
     const params = {date: getUrlParameter('date'), sortby: getUrlParameter('sortby'), substate: getUrlParameter('substate'), status: getUrlParameter('status') };
     
     if (!params.date){
-        options.date = moment();
+        options.date = '';
+        datepicker_value = options.date;
     }else{
         options.date = moment(params.date, 'YYYYMMDD');
+        datepicker_value = options.date.format('DD-MM-YYYY');    
     }
     if (params.sortby){
         sortby = $("#sortbyDropMenu li a#"+params.sortby).html();
@@ -72,14 +75,12 @@ $(function() {
       $('#datepicker').datepicker({
         format: 'dd-mm-yyyy',
         uiLibrary: 'bootstrap5',
-        value: options.date.format('DD-MM-YYYY'),
+        value: datepicker_value,
         change: function (e) {
             console.log(e);
             var input_date = $(this).val();
             input_date = moment(input_date, 'DD-MM-YYYY');
-            console.log('OptionsDate '+ options.date.format('YYYYMMDD'));
-            console.log('inputDate '+ input_date.format('YYYYMMDD'));
-            if(input_date.format('YYYYMMDD') !== options.date.format('YYYYMMDD')){
+            if(input_date.format('YYYYMMDD') !== options.date){
                 options.date = input_date;
                 applyFilter();
             }
@@ -87,7 +88,10 @@ $(function() {
     });
 
     function applyFilter() {
-        date = options.date.format('YYYYMMDD');
+        date = options.date;
+        if(options.date != ''){
+            date = options.date.format('YYYYMMDD');
+        }
         filter_url = '/list/orders?date='+date+'&sortby='+options.sortby+'&status='+options.status+'&substate='+options.substate;
         sessionStorage.setItem('filterUrl', filter_url);
         window.location.href=filter_url;
