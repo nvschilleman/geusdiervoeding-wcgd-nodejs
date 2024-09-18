@@ -52,7 +52,6 @@ function getOrder(order_id){
     let order = JSON.parse(localStorage_order);
 
     if(order === null){
-        console.log('orderNull');
         if (window.location.pathname == '/scan/order' || window.location.pathname == '/list/orders'){
             showLoading();
         }
@@ -69,8 +68,6 @@ function getOrder(order_id){
             dataType: 'json'
         });
     }else{
-        console.log('orderCached');
-        console.log(order);
         getOrderResult(order);
     }
     
@@ -78,8 +75,6 @@ function getOrder(order_id){
 }
 
 $(function() {
-
-    console.log(getReturnUrl());
 
     $('li.active').removeClass('active').removeAttr('aria-current');
     $('a[href="' + location.pathname + location.search +'"]').closest('li').addClass('active').attr('aria-current', 'page'); 
@@ -93,7 +88,6 @@ $(function() {
 });
 
 function redirect(res){
-    console.log('Pathname '+window.location.pathname);
     if (window.location.pathname == '/scan/order' || window.location.pathname == '/list/orders'){
         window.location.href = "/order/"+res.id+'?view=packages';
     }else{
@@ -102,8 +96,6 @@ function redirect(res){
 }
 
 async function getOrderResult(res){
-    console.log('getOrderAsync');
-    console.log(res);
     let icon = 'error';
     if(res.hasOwnProperty('code')){
         if (res.code == 'see_parent_order'){
@@ -118,7 +110,7 @@ async function getOrderResult(res){
                 allowOutsideClick: false
               }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href='/order?id='+res.data.parent_id+'&swr=1'
+                    window.location.href='/order/'+res.data.parent_id
                 } else if (result.isDismissed) {
                     if (window.location.pathname == '/scan/order'){
                         window.location.href = '/scan/order';
@@ -165,7 +157,6 @@ async function getOrderResult(res){
             if (window.location.pathname == '/scan/order'){
                 window.location.href = '/scan/order';
             }
-            console.log('alreadyPackedNotify dismissed');
             return false;
         }
     }
@@ -218,7 +209,7 @@ function getReturnUrl(){
 }
 
 function collectedOrder(order_id){
-    console.log('collectedOrderCalled');
+    
     var user = Cookies.getJSON('wp_CustomAuth').user_firstname;
     Swal.fire({
         title: 'Order gereedmelden...',
@@ -239,7 +230,6 @@ function collectedOrder(order_id){
                 },
                 dataType: 'json',
                 success: function(data) {
-                    console.log(data);
                     if(data.hasOwnProperty('code')){
                         
                         Swal.fire({
@@ -253,7 +243,7 @@ function collectedOrder(order_id){
                             allowOutsideClick: false
                         }).then((result) => {
                             if (result.isConfirmed) {
-                                collectedOrder(order_data);
+                                collectedOrder(order_id);
                             }else if(result.isDenied) {
                                 window.location.href = getReturnUrl();
                             }
@@ -273,8 +263,8 @@ function collectedOrder(order_id){
                             }
                         }).then((result) => {
                             if (result.dismiss === Swal.DismissReason.timer) {
-                                // window.location.href = getReturnUrl();
-                                location.reload();
+                                window.location.href = getReturnUrl();
+                                // location.reload();
                             }
                         });
                     }

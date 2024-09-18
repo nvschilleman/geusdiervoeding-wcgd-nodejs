@@ -94,11 +94,13 @@ app.get('/order/:orderId', function (req, res) {
     app_pickOrderPage(req, function(pickOrderError, pickOrderSuccess){
         
         if(!pickOrderError) {
-            var lineItems = pickOrderSuccess.line_items.sort((a, b) => a.atum_location.localeCompare(b.atum_location, undefined, { numeric: true, sensitivity: 'base'}));
+            var substate = pickOrderSuccess.meta_data.filter(x => x.key === 'wcgd_substate').map(x => x.value).toString();
+            var lineItems = pickOrderSuccess.line_items
             if(pickOrderSuccess.child_order){
-                var childLineItems = pickOrderSuccess.child_order.sort((a, b) => a.atum_location.localeCompare(b.atum_location, undefined, { numeric: true, sensitivity: 'base'}));
+                lineItems = lineItems.concat(pickOrderSuccess.child_order);
             }
-            res.render('order', {orderId: pickOrderSuccess.id, customerInfo: pickOrderSuccess.billing, customerNote: pickOrderSuccess.customer_note, orderItems: lineItems, childOrderId: pickOrderSuccess.child_order_id, childOrderCustomerNote: pickOrderSuccess.child_order_customer_note, childOrderItems: childLineItems});
+            lineItems = lineItems.sort((a, b) => a.atum_location.localeCompare(b.atum_location, undefined, { numeric: true, sensitivity: 'base'}));
+            res.render('order', {orderId: pickOrderSuccess.id,substate: substate, customerInfo: pickOrderSuccess.billing, customerNote: pickOrderSuccess.customer_note, orderItems: lineItems, childOrderId: pickOrderSuccess.child_order_id, childOrderCustomerNote: pickOrderSuccess.child_order_customer_note});
         } else {
             // res.json(productPageError);
             res.render('order', {error:pickOrderError});

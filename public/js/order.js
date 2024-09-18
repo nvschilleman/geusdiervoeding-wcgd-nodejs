@@ -3,6 +3,7 @@ $(function() {
     const url = new URL(window.location.href);
     const order_id = $('span#order_id').text();
     const OrderNotesUl = $("ul#order_notes_ul").clone();
+    const orderSubstate = $('input#orderSubstate').val();
 
     let filter_url = sessionStorage.getItem('filterUrl');
     if(!filter_url){
@@ -69,8 +70,6 @@ $(function() {
     postOrderNote(order_id, OrderNotesUl);
     });
     
-
-    
     const orderStr = localStorage.getItem(order_id);
     let order = JSON.parse(orderStr);
 
@@ -79,6 +78,11 @@ $(function() {
         order = getOrder(order_id);
     }else{
         orderData(order);
+    }
+
+    var swalDenyText = 'Terug naar orderlijst';
+    if(orderSubstate === 'afhaal'){
+        swalDenyText = 'Order afgehaald melden';
     }
 
     $('#dry_quantity_input').niceNumber({autoSize:false});
@@ -94,14 +98,18 @@ $(function() {
                 showCancelButton: true,
                 cancelButtonText: 'Annuleren',
                 confirmButtonText: 'Ja',
-                denyButtonText: 'Terug naar orderlijst',
+                denyButtonText: swalDenyText,
                 allowEscapeKey: false,
                 allowOutsideClick: false
               }).then((result) => {
                 if (result.isConfirmed) {
                     viewPackagesForm(url);
                 } else if (result.isDenied) {
-                    window.location.href=filter_url;
+                    if(orderSubstate === 'afhaal'){
+                        collectedOrder(order_id);
+                    }else{
+                        window.location.href=filter_url;
+                    }
                 }
               })
         }
@@ -161,7 +169,9 @@ function getOrderNotes(order_id, ul=null){
         dataType: 'json',
         success: function(res) {
             if(res.hasOwnProperty('code')){
-              console.log(res.code);
+                if(res.code == 403){
+                    flushSession(true);
+                }
             }else{
                 if(ul){
                     $("ul#order_notes_ul").replaceWith(ul.clone());
@@ -192,41 +202,46 @@ function getOrderNotes(order_id, ul=null){
 }
 
 function packingSlipData(res){
+    if(res.hasOwnProperty('code')){
+        if(res.code == 403){
+            flushSession(true);
+        }
+    }else{
+        var checkbox = $("input[type='checkbox'].form-check-input");
+        var order_status = res.order.order_status;
 
-    var checkbox = $("input[type='checkbox'].form-check-input");
-    var order_status = res.order.order_status;
+        if (order_status == 'Ingepakt'){
+            $(checkbox).prop("checked", true);
+            $(checkbox).closest('div').find('p.fw-bold').addClass('text-decoration-line-through text-muted');
+        }
 
-    if (order_status == 'Ingepakt'){
-        $(checkbox).prop("checked", true);
-        $(checkbox).closest('div').find('p.fw-bold').addClass('text-decoration-line-through text-muted');
+        if ( res.order.delivery_method == 'Afhaalorder' ){
+            $('span#delivery_method').removeClass( 'bg-dark' ).addClass( "bg-warning text-dark" );
+        }
+        $('span#delivery_date').text(res.order.delivery_date);
+        $('span#order_status').text(order_status);
+        $('span#delivery_method').text(res.order.delivery_method);
+
+        var no_stock_select = res.order.no_stock_select;
+        if( no_stock_select == ''){
+            no_stock_select = 'Geen voorkeur'
+        }
+        if( no_stock_select == 'Contact'){
+            no_stock_select = 'Contact opnemen'
+        }
+
+        $('p#nostockselect').text(no_stock_select);
+
+        $('span#quantities').text(res.order.order_quantity);
+        $('span#order_weight').text(res.order.order_weight);
+
+        if(res.child_order){
+            $('span#child_quantities').text(res.child_order.order_quantity);
+            $('span#child_order_weight').text(res.child_order.order_weight); 
+            $('span#combined_quantities').text(res.totals.quantity);
+            $('span#combined_order_weight').text(res.totals.weight);
+        }  
     }
-
-    if ( res.order.delivery_method == 'Afhaalorder' ){
-        $('span#delivery_method').removeClass( 'bg-dark' ).addClass( "bg-warning text-dark" );
-    }
-    $('span#delivery_date').text(res.order.delivery_date);
-    $('span#order_status').text(order_status);
-    $('span#delivery_method').text(res.order.delivery_method);
-
-    var no_stock_select = res.order.no_stock_select;
-    if( no_stock_select == ''){
-        no_stock_select = 'Geen voorkeur'
-    }
-    if( no_stock_select == 'Contact'){
-        no_stock_select = 'Contact opnemen'
-    }
-
-    $('p#nostockselect').text(no_stock_select);
-
-    $('span#quantities').text(res.order.order_quantity);
-    $('span#order_weight').text(res.order.order_weight);
-
-    if(res.child_order){
-        $('span#child_quantities').text(res.child_order.order_quantity);
-        $('span#child_order_weight').text(res.child_order.order_weight); 
-        $('span#combined_quantities').text(res.totals.quantity);
-        $('span#combined_order_weight').text(res.totals.weight);
-    }  
 }
 
 // function renderNotes(res){
@@ -293,10 +308,11 @@ function postOrderNote(order_id, ul){
 }
 
 function orderData(res){
-    $('#trip_number').text(res.deliveryInformation.tripNumber);
 
+    $('p#stop-number-label').text('Stopnummer');
+    $('p#stop-number').text(res.deliveryInformation.tripNumber);
+    
     if ( res.deliveryInformation.tripNumber == '' ){
-        $('p#stop-number-label').text('Stopnummer');
         $('p#stop-number').text('Op label schrijven!');
     }
 

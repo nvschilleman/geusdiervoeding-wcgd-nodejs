@@ -7,6 +7,7 @@
 {{#unless error}}
 <script src="/js/order.js"></script>
 <script src="/js/modules/jquery.nice-number.js"></script>
+<input type="hidden" id="orderSubstate" name="orderSubstate" value={{substate}} />
 <div class="container mb-5">
   <div class="col-xl-6 mb-4">
     <div class="card p-0">
@@ -48,11 +49,12 @@
             </div>
           </div>
         </div>
+        <div class="card-footer border-0 bg-body-tertiary p-2 d-flex justify-content-around">
+            <a class="btn btn-sm btn-link m-0 text-reset" data-bs-toggle="collapse" href="#customer_info" role="button" aria-expanded="false" aria-controls="customer_info" >Klantdetails</a>
+            <a class="btn btn-sm btn-link m-0 text-reset" id="order_notes_btn" data-bs-toggle="collapse" href="#order_notes" role="button" aria-expanded="false" aria-controls="order_notes" >Ordernotities<span id="order_notes_badge" style="display: none;" class="badge rounded-pill bg-danger mx-1"></span></a>
+        </div>
       </div>
-      <div class="card-footer border-0 bg-body-tertiary p-2 d-flex justify-content-around">
-          <a class="btn btn-sm btn-link m-0 text-reset" data-bs-toggle="collapse" href="#customer_info" role="button" aria-expanded="false" aria-controls="customer_info" >Klantdetails</a>
-          <a class="btn btn-sm btn-link m-0 text-reset" id="order_notes_btn" data-bs-toggle="collapse" href="#order_notes" role="button" aria-expanded="false" aria-controls="order_notes" >Ordernotities<span id="order_notes_badge" style="display: none;" class="badge rounded-pill bg-danger mx-1"></span></a>
-      </div>
+
       <div class="collapse p-3" id="customer_info">
         <p class="mb-1">{{customerInfo.first_name}}&nbsp;{{customerInfo.last_name}}</p>
         <p class="mb-1">{{customerInfo.address_1}}</p>
@@ -110,38 +112,6 @@
       </li>
       {{/ifnoteq}}
       {{/each}}
-      {{#if childOrderId}}
-      <li class="list-group-item d-flex justify-content-center">
-        <div class="d-flex align-items-center">
-          <div>
-          <p class="mb-0">Artikelen van combiorder #{{childOrderId}}</p>
-          </div>
-        </div>
-      </li>
-      {{#each childOrderItems}}
-      {{#ifnoteq this.quantity_to_pick 0}}
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-        <div class="d-flex align-items-center">
-            <input class="form-check-input" type="checkbox" value="" id="checkbox{{this.id}}" />
-            <label class="form-check-label" for="checkbox{{this.id}}">
-              <div class="ms-3">
-              <p class="fw-bold mb-0">{{this.quantity_to_pick}}x&nbsp;{{#unless this.parent_name}}{{this.name}}{{/unless}}{{#if this.parent_name}}{{this.parent_name}}{{/if}}</p>
-                <p class="fs-6 fw-light fst-italic mb-1">{{#unless this.variation_attr}}Gewicht {{this.product_weight}}kg{{/unless}}{{#if this.variation_attr}}{{this.variation_attr}}{{/if}}</p>
-                <p class="text-muted mb-0"> SKU:&nbsp;{{this.sku}}</p>
-              {{#ifnoteq this.quantity_refunded 0}}
-                <p class="mt-1 mb-0 text-danger fst-italic">
-                    {{this.quantity_refunded}} van de {{this.quantity}} stuks zijn gecrediteerd.
-                </p>
-              {{/ifnoteq}}
-            </label>
-          </div>
-        </div>
-          <span class="badge bg-primary rounded-pill">{{this.atum_location}}</span>
-        
-      </li>
-      {{/ifnoteq}}
-      {{/each}}
-      {{/if}}
       <li class="list-group-item d-flex justify-content-between align-items-center">
         {{#unless childOrderId}}
         <div class="d-flex align-items-center">

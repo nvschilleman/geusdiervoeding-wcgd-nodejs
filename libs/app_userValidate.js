@@ -18,7 +18,7 @@ module.exports = function(req,res,next){
         console.log('Token error: status', error.response.data.data.status, '(', error.response.data.code, ')', '\n');
         res.json({
             success: false, 
-            status: error.response.data.data.status
+            code: error.response.data.data.status
         });
     });
 }

@@ -12,8 +12,8 @@ $(function() {
     const params = {date: getUrlParameter('date'), sortby: getUrlParameter('sortby'), substate: getUrlParameter('substate'), status: getUrlParameter('status') };
     
     if (!params.date){
-        options.date = '';
-        datepicker_value = options.date;
+        options.date = moment(19700101, 'YYYYMMDD');
+        datepicker_value = '';
     }else{
         options.date = moment(params.date, 'YYYYMMDD');
         datepicker_value = options.date.format('DD-MM-YYYY');    
@@ -80,7 +80,7 @@ $(function() {
             console.log(e);
             var input_date = $(this).val();
             input_date = moment(input_date, 'DD-MM-YYYY');
-            if(input_date.format('YYYYMMDD') !== options.date){
+            if(input_date.format('YYYYMMDD') !== options.date.format('YYYYMMDD')){
                 options.date = input_date;
                 applyFilter();
             }
