@@ -88,9 +88,10 @@ $(function() {
     });
 
     function applyFilter() {
-        date = options.date;
-        if(options.date != ''){
-            date = options.date.format('YYYYMMDD');
+        date = options.date.format('YYYYMMDD');
+        // Temporary fix for datepicker
+        if(date == 19700101){
+            date = ''
         }
         filter_url = '/list/orders?date='+date+'&sortby='+options.sortby+'&status='+options.status+'&substate='+options.substate;
         sessionStorage.setItem('filterUrl', filter_url);
