@@ -19,8 +19,8 @@ module.exports = function(request,cb) {
         label:label_id,
         data: request },
         {
-        timeout: 4500,
-        signal: newAbortSignal(4000)
+        timeout: 10500,
+        signal: newAbortSignal(10000)
     })
 
     .then(function (response) {
