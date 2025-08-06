@@ -1,11 +1,11 @@
 var appConfig = require('../config.json'),
     axios = require('axios');
 
-function newAbortSignal(timeoutMs) {
-    const abortController = new AbortController();
-    setTimeout(() => abortController.abort(), timeoutMs || 0);
-    return abortController.signal;
-    }
+// function newAbortSignal(timeoutMs) {
+//     const abortController = new AbortController();
+//     setTimeout(() => abortController.abort(), timeoutMs || 0);
+//     return abortController.signal;
+//     }
 
 module.exports = function(request,cb) {
     if (request.hasOwnProperty('tripNumber')){
@@ -17,11 +17,7 @@ module.exports = function(request,cb) {
     axios.post(appConfig.zpl_printer.print_endpoint, {
         printer:appConfig.zpl_printer.printer_id, 
         label:label_id,
-        data: request },
-        {
-        timeout: 10500,
-        signal: newAbortSignal(10000)
-    })
+        data: request })
 
     .then(function (response) {
         cb(null, response.data);
