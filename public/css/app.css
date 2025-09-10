@@ -402,6 +402,11 @@ div.inventory_container:nth-child(even){
     /* max-width: 100%;  */
 }
 
+.delivered, .collected {
+    --bs-bg-opacity: 1;
+    background-color: rgb(5, 146, 0)
+}
+
 /* div#stopNumCol{
     display: unset;
 }

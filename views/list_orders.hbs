@@ -85,10 +85,9 @@
                         </div>
                         <div style="margin: auto; text-align:center;" class="col-4">
                             <span class="badge bg-primary rounded-pill">{{this.orderStatus}}</span>
-                            {{#ifeq this.orderSubstateSlug 'afhaal'}}
+         
                             <br />
                             <p class="m-0" style="font-size:.9rem">{{this.customerData.name}}</p>
-                            {{/ifeq}}
                         </div>
                         <div style="margin: auto; text-align:right;" class="col-4">
                             <span class="badge {{this.orderSubstateSlug}} rounded-pill">{{this.orderSubstate}}</span>

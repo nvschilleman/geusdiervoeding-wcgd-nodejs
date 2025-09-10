@@ -7,9 +7,9 @@ $(function() {
 
     sessionStorage.setItem('returnUrl', filter_url);
 
-    let options = {date: '', substate: '', status: '', sortby: ''};
+    let options = {date: '', substate: '', status: '', sortby: '', surname: ''};
     var datepicker_value;
-    const params = {date: getUrlParameter('date'), sortby: getUrlParameter('sortby'), substate: getUrlParameter('substate'), status: getUrlParameter('status') };
+    const params = {date: getUrlParameter('date'), sortby: getUrlParameter('sortby'), substate: getUrlParameter('substate'), status: getUrlParameter('status'), surname: getUrlParameter('surname') };
     
     if (!params.date){
         options.date = moment(19700101, 'YYYYMMDD');
@@ -32,6 +32,11 @@ $(function() {
         order_status = $("#statusDropMenu li a#"+params.status).html();
         $("#statusDropBtn").text(order_status);
         options.status = params.status;
+    }
+    if (params.surname){
+        // surname = $("input#surname").val();
+        $("input#surname").val(params.surname);
+        options.surname = params.surname;
     }
 
     if (params.sortby != 'trip'){
@@ -72,6 +77,11 @@ $(function() {
         applyFilter();
       });
 
+      $("button#doSearchBtn").on('click', function(e) {      
+        e.preventDefault();
+        applyFilter();
+      });
+
       $('#datepicker').datepicker({
         format: 'dd-mm-yyyy',
         uiLibrary: 'bootstrap5',
@@ -88,12 +98,13 @@ $(function() {
     });
 
     function applyFilter() {
+        surname = $("input#surname").val();
         date = options.date.format('YYYYMMDD');
         // Temporary fix for datepicker
         if(date == 19700101){
             date = ''
         }
-        filter_url = '/list/orders?date='+date+'&sortby='+options.sortby+'&status='+options.status+'&substate='+options.substate;
+        filter_url = '/list/orders?date='+date+'&sortby='+options.sortby+'&status='+options.status+'&substate='+options.substate+'&surname='+surname;
         sessionStorage.setItem('filterUrl', filter_url);
         window.location.href=filter_url;
     }
