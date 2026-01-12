@@ -108,7 +108,17 @@
               </div>
             </label>
         </div>
-          <span class="badge bg-primary rounded-pill">{{this.atum_location}}</span>
+        <div class="position-absolute top-0 end-0 m-2"></div>
+            <div class="d-flex align-items-end flex-column">
+              <span class="badge bg-primary rounded-pill mb-1">{{this.atum_location}}</span>
+              {{#if this.atum_bbe}}
+                {{#each this.atum_bbe}}
+                  <span class="badge bg-danger rounded-pill mb-1">{{this.qty}}x&nbsp;{{this.bbe_date}}</span>
+                {{/each}}
+              {{/if}}
+            </div>
+          </div>
+
       </li>
       {{/ifnoteq}}
       {{/each}}
